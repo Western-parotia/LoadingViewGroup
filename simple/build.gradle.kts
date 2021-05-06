@@ -59,4 +59,5 @@ dependencies {
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.Material.material)
     implementation(Dependencies.AndroidX.constraintlayout)
+    implementation(project(":loading"))
 }
