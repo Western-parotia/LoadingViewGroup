@@ -15,10 +15,10 @@ android {
     }
     buildTypes {
         forEach {
-            if(it.name == "release"){
+//            if(it.name == "release"){
                 it.isMinifyEnabled = true
                 it.consumerProguardFiles("proguard-rules.pro")
-            }
+//            }
         }
     }
 
