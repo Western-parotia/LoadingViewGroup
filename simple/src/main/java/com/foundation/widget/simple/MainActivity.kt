@@ -9,9 +9,10 @@ import com.foundation.widget.loading.LoadingViewGroup
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val lv = LoadingViewGroup(this)
-        setContentView(lv)
-        lv.setUndergroundImg(R.drawable.ic_launcher_background)
-        lv.setLoadingTxt("加载中。。。。。。。。")
+        setContentView(R.layout.activity_main)
+//        val lv = LoadingViewGroup(this)
+//        setContentView(lv)
+//        lv.setUndergroundImg(R.drawable.ic_launcher_background)
+//        lv.setLoadingTxt("加载中。。。。。。。。")
     }
 }
