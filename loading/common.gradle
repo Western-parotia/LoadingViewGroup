@@ -1,0 +1,29 @@
+import com.foundation.widget.buildsrc.AndroidConfig
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion AndroidConfig.compileSdkVersion
+    defaultConfig {
+        minSdkVersion AndroidConfig.minSdkVersion
+        targetSdkVersion AndroidConfig.targetSdkVersion
+        versionCode = 1
+        versionName = "11"
+    }
+//    buildTypes {
+//        forEach {
+//            if(it.name == "release"){
+//            it.isMinifyEnabled = true
+//            it.consumerProguardFiles("proguard-rules.pro")
+//            }
+//        }
+//    }
+
+//    compileOptions {
+//        sourceCompatibility = AndroidConfig.Language.sourceCompatibility
+//        targetCompatibility = AndroidConfig.Language.targetCompatibility
+//    }
+//    kotlinOptions {
+//        jvmTarget = AndroidConfig.Language.jvmTarget
+//    }
+}
