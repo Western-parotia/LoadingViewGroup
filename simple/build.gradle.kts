@@ -1,3 +1,4 @@
+import com.foundation.widget.buildsrc.Dependencies
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -5,7 +6,6 @@ plugins {
 
 android {
     compileSdkVersion(30)
-    buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "com.foundation.widget.simple"
@@ -54,12 +54,9 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.32")
-    implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("com.google.android.material:material:1.3.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    testImplementation("junit:junit:4.+")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    implementation(Dependencies.Kotlin.kotlin_stdlib)
+    implementation(Dependencies.AndroidX.core_ktx)
+    implementation(Dependencies.AndroidX.appcompat)
+    implementation(Dependencies.Material.material)
+    implementation(Dependencies.AndroidX.constraintlayout)
 }
