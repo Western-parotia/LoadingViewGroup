@@ -18,8 +18,12 @@ object Dependencies {
 
     }
 
-    object Material{
+    object Material {
         const val material = "com.google.android.material:material:1.3.0"
     }
 
+    object Glide {
+        const val glide = "com.github.bumptech.glide:glide:4.10.0"
+        const val compiler = "com.github.bumptech.glide:compiler:4.10.0"
+    }
 }

@@ -23,7 +23,6 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     var failViewClickListener: (view: View) -> Unit = {}
     var loadingAdapter: PageLoadingAdapter = NormalLoadingAdapter(context)
         set(value) {
-            "PageLoadingView loadingAdapter  set(value) {".log(":PageLoadingView")
             field = value
             postOnAnimation {
                 resetLayout()
@@ -67,9 +66,9 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         animation?.cancel()
-        for (i in 0..childCount) {
+        for (i in 0 until childCount) {
             val view = getChildAt(i)
-            view.animation?.cancel()
+            view?.animation?.cancel()
         }
         loadingAdapter.onStopLoading(loadingView)
     }

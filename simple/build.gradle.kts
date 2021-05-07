@@ -63,4 +63,7 @@ dependencies {
     implementation(Dependencies.Material.material)
     implementation(Dependencies.AndroidX.constraintlayout)
     implementation(project(":loading"))
+    implementation(Dependencies.Glide.glide)
+    implementation(Dependencies.Glide.compiler)
+
 }
