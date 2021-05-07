@@ -9,10 +9,10 @@ import android.view.View
  *create by zhusw on 5/7/21 09:37
  */
 interface LoadingAdapter {
+    fun hideBackgroundImg():Boolean
     fun getLoadingBackground():Drawable?
     fun getLoadingView(): View?
     fun getLoadingFailView():View?
-
     /**
      * 响应失败状态下的view点击
      */

@@ -1,12 +1,16 @@
 package com.foundation.widget.loading
 
 import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -25,8 +29,9 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
     constructor(context: Context) : this(context, null)
 
     var failViewClickListener: FailViewClickListener? = null
-    var loadingAdapter: LoadingAdapter? = null
+    var loadingAdapter: LoadingAdapter = NormalLoadingAdapter()
         set(value) {
+            println("LoadingViewGroup loadingAdapter set value")
             field = value
             postOnAnimation {
                 resetLayout()
@@ -38,11 +43,9 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
         layoutParams = LayoutParams(MATCH_PART, MATCH_PART)
         addView(this)
     }
-    private var loadingView: View = TextView(context).apply {
-        text = "loading"
-        gravity = Gravity.CENTER
-        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-        setBackgroundColor(Color.BLUE)
+    private var loadingView: View = ImageView(context).apply {
+        layoutParams = LayoutParams(48.dp, 48.dp)
+        setBackgroundResource(R.drawable.loading_ic_baseline_toys_48)
         addView(this)
     }
     private var loadingFailView: View = Button(context).apply {
@@ -50,7 +53,7 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
         gravity = Gravity.CENTER
         layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         addView(this)
-        visibility = View.INVISIBLE
+        visibility = View.GONE
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -76,9 +79,9 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
     }
 
     private fun resetLayout() {
-        removeAllViews()
-        loadingAdapter?.run {
+        loadingAdapter.run {
             getLoadingView()?.let {
+                removeView(loadingView)
                 loadingView = it
                 loadingView.apply {
                     layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
@@ -86,16 +89,19 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
                 }
             }
             getLoadingFailView()?.let {
+                removeView(loadingFailView)
                 loadingFailView = it
                 loadingFailView.apply {
                     layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
                     visibility = View.INVISIBLE
                     addView(this)
                 }
-
             }
-            getLoadingBackground()?.let {
-                undergroundImg.background = it
+            if(!hideBackgroundImg()){
+                undergroundImg.visibility = View.VISIBLE
+                getLoadingBackground()?.let {
+                    undergroundImg.background = it
+                }
             }
             getLoadingFailEventView()?.setOnClickListener {
                 failViewClickListener?.onClick(it)
@@ -112,13 +118,42 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
         alpha = 0F
         visibility = View.VISIBLE
         with(loadingFailView) {
-            if (visibility == View.VISIBLE) visibility = View.INVISIBLE
+            if (visibility == View.VISIBLE) visibility = View.GONE
         }
         with(loadingView) {
             if (visibility != View.VISIBLE) visibility = View.VISIBLE
+            if(alpha != 1F) alpha = 1F
         }
-        loadingAdapter?.onShowLoading(loadingView)
+        if(!loadingAdapter.hideBackgroundImg()){
+            with(undergroundImg) {
+                if (visibility != View.VISIBLE) visibility = View.VISIBLE
+            }
+        }
+        loadingAdapter.onShowLoading(loadingView)
         animate().alpha(1F).setDuration(ANIM_DURATION)
+            .start()
+    }
+    fun showLoadingFail(hideBackground:Boolean){
+        loadingView.animation?.cancel()
+        loadingView.animate()
+            .alpha(0F)
+            .setDuration(ANIM_DURATION)
+            .withEndAction {
+                alpha = 1F
+                visibility =View.VISIBLE
+                if(hideBackground){
+                    with(undergroundImg) {
+                        if (visibility == View.VISIBLE) visibility = View.GONE
+                    }
+                }
+                with(loadingView) {
+                    if (visibility == View.VISIBLE) visibility = View.GONE
+                    alpha = 1F
+                }
+                with(loadingFailView) {
+                    if (visibility != View.VISIBLE) visibility = View.VISIBLE
+                }
+            }
             .start()
     }
 
@@ -127,15 +162,12 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
      */
     fun stopLoading() {
         animate().alpha(0F).setDuration(ANIM_DURATION)
-            .setListener(object : AnimatorEndListener() {
-                override fun onEnd(animation: Animator?) {
-                    visibility = View.GONE
-                    loadingAdapter?.onStopLoading(loadingView)
-                }
-            })
+            .withEndAction {
+                visibility = View.INVISIBLE
+                loadingAdapter.onStopLoading(loadingView)
+            }
             .start()
     }
-
 
 }
 
@@ -143,21 +175,43 @@ interface FailViewClickListener {
     fun onClick(view: View);
 }
 
-private abstract class AnimatorEndListener : Animator.AnimatorListener {
-    override fun onAnimationStart(animation: Animator?) {
-
+private class NormalLoadingAdapter:LoadingAdapter{
+    override fun hideBackgroundImg(): Boolean {
+        return true
     }
 
-    override fun onAnimationEnd(animation: Animator?) {
-        onEnd(animation)
+    override fun getLoadingBackground(): Drawable? {
+        return null
     }
 
-    override fun onAnimationCancel(animation: Animator?) {
+    override fun getLoadingView(): View? {
+        return null
     }
 
-    override fun onAnimationRepeat(animation: Animator?) {
+    override fun getLoadingFailView(): View? {
+        return null
     }
 
-    abstract fun onEnd(animation: Animator?)
+    override fun getLoadingFailEventView(): View? {
+        return null
+    }
+
+    override fun onShowLoading(loadingView: View) {
+        loadingView.animation?.cancel()
+        ObjectAnimator.ofFloat(loadingView,"rotation",0F,360F).apply {
+            repeatCount = Animation.INFINITE
+            duration = ANIM_DURATION
+            start()
+        }
+        ObjectAnimator.ofFloat(loadingView,"alpha",0F,1F).apply {
+            repeatCount = Animation.INFINITE
+            duration = ANIM_DURATION
+            start()
+        }
+    }
+
+    override fun onStopLoading(loadingView: View) {
+        loadingView.animation?.cancel()
+    }
+
 }
-
