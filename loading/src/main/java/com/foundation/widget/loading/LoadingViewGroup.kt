@@ -11,6 +11,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -142,15 +143,15 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
                 alpha = 1F
                 visibility =View.VISIBLE
                 if(hideBackground){
-                    with(undergroundImg) {
+                    undergroundImg.run {
                         if (visibility == View.VISIBLE) visibility = View.GONE
                     }
                 }
-                with(loadingView) {
+                loadingView.run {
                     if (visibility == View.VISIBLE) visibility = View.GONE
                     alpha = 1F
                 }
-                with(loadingFailView) {
+                loadingFailView.run {
                     if (visibility != View.VISIBLE) visibility = View.VISIBLE
                 }
             }
@@ -198,13 +199,16 @@ private class NormalLoadingAdapter:LoadingAdapter{
 
     override fun onShowLoading(loadingView: View) {
         loadingView.animation?.cancel()
-        ObjectAnimator.ofFloat(loadingView,"rotation",0F,360F).apply {
+        ObjectAnimator.ofFloat(loadingView,"rotation",0F,361F).apply {
             repeatCount = Animation.INFINITE
             duration = ANIM_DURATION
+            repeatMode = ValueAnimator.RESTART
+            interpolator = LinearInterpolator()
             start()
         }
-        ObjectAnimator.ofFloat(loadingView,"alpha",0F,1F).apply {
+        ObjectAnimator.ofFloat(loadingView,"alpha",0.2F,1F).apply {
             repeatCount = Animation.INFINITE
+            repeatMode = ValueAnimator.REVERSE
             duration = ANIM_DURATION
             start()
         }
