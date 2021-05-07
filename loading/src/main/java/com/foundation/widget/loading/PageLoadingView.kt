@@ -1,23 +1,13 @@
 package com.foundation.widget.loading
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.SparseArray
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.Animation
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.DecorContentParent
-import androidx.core.util.forEach
 
 /**
  *@Desc:
@@ -32,7 +22,7 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
     constructor(context: Context) : this(context, null)
 
     var failViewClickListener: (view: View) -> Unit = {}
-    var loadingAdapter: LoadingAdapter = NormalLoadingAdapter()
+    var loadingAdapter: PageLoadingAdapter = NormalLoadingAdapter()
         set(value) {
             println("LoadingViewGroup loadingAdapter set value")
             field = value

@@ -16,7 +16,7 @@ import androidx.core.util.forEach
  *create by zhusw on 5/7/21 14:57
  */
 private const val ANIM_DURATION_LONG = 800L
-class NormalLoadingAdapter : LoadingAdapter {
+class NormalLoadingAdapter : PageLoadingAdapter {
     private val animCache: SparseArray<ObjectAnimator> = SparseArray()
     override fun hideBackgroundImg(): Boolean {
         return true

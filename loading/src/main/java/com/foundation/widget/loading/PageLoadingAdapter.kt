@@ -8,16 +8,17 @@ import android.view.View
  *-loading 适配器
  *create by zhusw on 5/7/21 09:37
  */
-interface LoadingAdapter {
-    fun hideBackgroundImg():Boolean
-    fun getLoadingBackground():Drawable?
+interface PageLoadingAdapter {
+    fun hideBackgroundImg(): Boolean
+    fun getLoadingBackground(): Drawable?
     fun getLoadingView(): View?
-    fun getLoadingFailView():View?
+    fun getLoadingFailView(): View?
+
     /**
      * 响应失败状态下的view点击
      */
-    fun getLoadingFailEventView():View?
-    fun onShowLoading(loadingView:View)
+    fun getLoadingFailEventView(): View?
+    fun onShowLoading(loadingView: View)
     fun onStopLoading(loadingView: View)
 
 }
