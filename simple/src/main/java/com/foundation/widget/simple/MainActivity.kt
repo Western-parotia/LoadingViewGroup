@@ -19,17 +19,21 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.lc.loadingView.loadingAdapter = MyContentLoadingAdapter(this)
-        binding.lv.loadingAdapter = DiyLoading(this)
+        binding.lv2.loadingAdapter = DiyLoading(this)
+
         binding.btnStart.setOnClickListener {
             binding.lv.showLoading()
+            binding.lv2.showLoading()
             binding.lc.loadingView.showLoading()
         }
         binding.btnStop.setOnClickListener {
             binding.lv.stopLoading()
+            binding.lv2.stopLoading()
             binding.lc.loadingView.stopLoading()
         }
         binding.btnShowFail.setOnClickListener {
             binding.lv.showLoadingFail(true)
+            binding.lv2.showLoadingFail(true)
             binding.lc.loadingView.showLoadingFail(true)
         }
         binding.lc.loadingView.failViewClickListener = {
