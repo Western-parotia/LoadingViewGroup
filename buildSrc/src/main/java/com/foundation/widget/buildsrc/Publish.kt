@@ -1,4 +1,6 @@
 package com.foundation.widget.buildsrc
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  *@Desc:
@@ -8,9 +10,18 @@ package com.foundation.widget.buildsrc
  */
 object Publish {
     object Version{
+        private val timeStamp = getTimeStamp()
+        get() {
+            "timeStamp: $field".log("Publish===")
+              return field
+        }
         const val versionCode = 1
-        const val versionName = "1.1"
+        const val versionName = "1.0"
+        var versionTimeStamp = "$versionName-$timeStamp"
+        private set
     }
 
-
+}
+private fun getTimeStamp():String{
+   return SimpleDateFormat("yyyy-mm-HH-mm-ss", Locale.CHINA).format(Date(System.currentTimeMillis()))
 }

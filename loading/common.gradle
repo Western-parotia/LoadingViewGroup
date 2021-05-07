@@ -1,4 +1,5 @@
 import com.foundation.widget.buildsrc.AndroidConfig
+import com.foundation.widget.buildsrc.Publish
 
 apply plugin: 'com.android.library'
 
@@ -7,23 +8,16 @@ android {
     defaultConfig {
         minSdkVersion AndroidConfig.minSdkVersion
         targetSdkVersion AndroidConfig.targetSdkVersion
-        versionCode = 1
-        versionName = "11"
+        versionCode = Publish.Version.versionCode
+        versionName = Publish.Version.versionName
     }
-//    buildTypes {
-//        forEach {
-//            if(it.name == "release"){
-//            it.isMinifyEnabled = true
-//            it.consumerProguardFiles("proguard-rules.pro")
-//            }
-//        }
-//    }
 
-//    compileOptions {
-//        sourceCompatibility = AndroidConfig.Language.sourceCompatibility
-//        targetCompatibility = AndroidConfig.Language.targetCompatibility
-//    }
-//    kotlinOptions {
-//        jvmTarget = AndroidConfig.Language.jvmTarget
-//    }
+
+    compileOptions {
+        sourceCompatibility = AndroidConfig.Language.sourceCompatibility
+        targetCompatibility = AndroidConfig.Language.targetCompatibility
+    }
+    kotlinOptions {
+        jvmTarget = AndroidConfig.Language.jvmTarget
+    }
 }

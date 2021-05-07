@@ -1,21 +1,7 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle-backup.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# 1.指定混淆时采用的算法，后面的参数是一个过滤器
+# 这个过滤器是谷歌推荐的算法，一般不改变
+#-optimizations !code/simplification/artithmetic,!field/*,!class/merging/*
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# 2.代码混淆压缩比，在0~7之间，默认为5,一般不需要修改
+#-optimizationpasses 5
+-dontshrink

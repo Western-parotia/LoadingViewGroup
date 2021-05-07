@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.SparseArray
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.DecorContentParent
+import androidx.core.util.forEach
 
 /**
  *@Desc:
@@ -24,7 +26,6 @@ import androidx.appcompat.widget.DecorContentParent
  *create by zhusw on 5/6/21 17:08
  */
 private const val ANIM_DURATION = 400L
-private const val ANIM_DURATION_LONG = 800L
 
 class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
     ViewGroup(context, attributeSet) {
@@ -81,6 +82,7 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
             val view = getChildAt(i)
             view.animation?.cancel()
         }
+        loadingAdapter.onStopLoading(loadingView)
     }
 
     private fun resetLayout() {
@@ -109,8 +111,6 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
                 }
             }
             getLoadingFailEventView()?.let {
-                removeView(loadingFailView)
-                loadingFailView = it
                 setOnClickListener { v ->
                     failViewClickListener.invoke(v)
                 }
@@ -179,52 +179,8 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
             .start()
     }
 
-}
-
-interface FailViewClickListener {
-    fun onClick(view: View);
-}
-
-private class NormalLoadingAdapter : LoadingAdapter {
-    override fun hideBackgroundImg(): Boolean {
-        return true
+    fun showLoadingState(){
+        alpha = 1F
+        visibility = View.VISIBLE
     }
-
-    override fun getLoadingBackground(): Drawable? {
-        return null
-    }
-
-    override fun getLoadingView(): View? {
-        return null
-    }
-
-    override fun getLoadingFailView(): View? {
-        return null
-    }
-
-    override fun getLoadingFailEventView(): View? {
-        return null
-    }
-
-    override fun onShowLoading(loadingView: View) {
-        loadingView.animation?.cancel()
-        ObjectAnimator.ofFloat(loadingView, "rotationX", 0F, 180F).apply {
-            repeatCount = Animation.INFINITE
-            duration = ANIM_DURATION_LONG
-            repeatMode = ValueAnimator.RESTART
-            interpolator = AccelerateDecelerateInterpolator()
-            start()
-        }
-        ObjectAnimator.ofFloat(loadingView, "alpha", 0.2F, 0.8F).apply {
-            repeatCount = Animation.INFINITE
-            repeatMode = ValueAnimator.REVERSE
-            duration = ANIM_DURATION_LONG
-            start()
-        }
-    }
-
-    override fun onStopLoading(loadingView: View) {
-        loadingView.animation?.cancel()
-    }
-
 }

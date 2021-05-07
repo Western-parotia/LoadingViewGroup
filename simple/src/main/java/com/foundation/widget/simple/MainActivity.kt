@@ -24,7 +24,9 @@ class MainActivity : AppCompatActivity() {
         binding.lv.failViewClickListener={
             Toast.makeText(MainActivity@this,"fail click",Toast.LENGTH_LONG).show()
         }
-
+        binding.btnShow.setOnClickListener {
+            binding.lv.showLoadingState()
+        }
     }
 
 }

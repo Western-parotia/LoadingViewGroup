@@ -3,11 +3,6 @@ import com.foundation.widget.buildsrc.*
 apply(plugin = "com.android.library")
 apply(plugin = "kotlin-android")
 
-object Ver{
-    const val code = 1
-    const val name = "1.0"
-}
-
 tasks.register("aaaMyTask"){
 
 }

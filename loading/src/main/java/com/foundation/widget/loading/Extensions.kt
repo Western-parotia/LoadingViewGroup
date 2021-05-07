@@ -10,11 +10,15 @@ import android.view.ViewGroup
  *-
  *create by zhusw on 5/6/21 18:08
  */
+private const val TAG ="BaseLoadingWidget"
+internal fun String.log(secTAG:String){
+    println("$TAG : $secTAG $this")
+}
+
 internal const val MATCH_PART = ViewGroup.LayoutParams.MATCH_PARENT
 internal const val WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT
 internal val Float.dp get() = this * Resources.getSystem().displayMetrics.density+0.5F
 internal val Int.dp get() = this.toFloat().dp.toInt()
-
 internal fun Int.toExactlyMeasureSpec():Int{
     return View.MeasureSpec.makeMeasureSpec(this, View.MeasureSpec.EXACTLY)
 }
