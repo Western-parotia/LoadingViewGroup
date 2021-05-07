@@ -8,7 +8,6 @@ import android.util.SparseArray
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
-import androidx.core.content.ContextCompat
 import androidx.core.util.forEach
 
 /**
@@ -19,14 +18,11 @@ import androidx.core.util.forEach
  */
 private const val ANIM_DURATION_LONG = 800L
 
-class NormalLoadingAdapter(private val context: Context) : PageLoadingAdapter {
+open class NormalLoadingAdapter(private val context: Context) : PageLoadingAdapter {
     private val animCache: SparseArray<ObjectAnimator> = SparseArray()
-    private val loadingBackgroundDrawable =
-        ContextCompat.getDrawable(context, R.drawable.loading_sp_bg)
-
     override fun showBackgroundImg(): Boolean = false
 
-    override fun getLoadingBackground(): Drawable? = loadingBackgroundDrawable
+    override fun getLoadingBackground(): Drawable? = null
 
     override fun getLoadingView(): View? = null
 

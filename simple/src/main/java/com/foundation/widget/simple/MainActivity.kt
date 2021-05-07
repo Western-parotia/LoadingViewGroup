@@ -1,8 +1,12 @@
 package com.foundation.widget.simple
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.foundation.widget.loading.NormalLoadingAdapter
 import com.foundation.widget.simple.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -10,7 +14,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        binding.lc.loadingView.loadingAdapter = MyContentLoadingAdapter(this)
+        binding.lv.loadingAdapter = MySingleLoadingAdapter(this)
         binding.btnStart.setOnClickListener {
             binding.lv.showLoading()
             binding.lc.loadingView.showLoading()
@@ -35,4 +40,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+}
+
+class MySingleLoadingAdapter(private val context: Context) : NormalLoadingAdapter(context) {
+    override fun showBackgroundImg(): Boolean = true
+    override fun getLoadingBackground(): Drawable? =
+        ContextCompat.getDrawable(context, R.drawable.sp_loading_bg1)
+}
+
+class MyContentLoadingAdapter(private val context: Context) : NormalLoadingAdapter(context) {
+    override fun showBackgroundImg(): Boolean = true
+    override fun getLoadingBackground(): Drawable? {
+        return ContextCompat.getDrawable(context, R.drawable.img_skeleton_screen)
+
+    }
 }
