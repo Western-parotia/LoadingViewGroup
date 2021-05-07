@@ -2,6 +2,7 @@ package com.foundation.widget.simple
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.foundation.widget.loading.LoadingViewGroup
 import com.foundation.widget.simple.databinding.ActivityMainBinding
 
@@ -19,6 +20,9 @@ class MainActivity : AppCompatActivity() {
         }
         binding.btnShowFail.setOnClickListener {
             binding.lv.showLoadingFail(true)
+        }
+        binding.lv.failViewClickListener={
+            Toast.makeText(MainActivity@this,"fail click",Toast.LENGTH_LONG).show()
         }
 
     }

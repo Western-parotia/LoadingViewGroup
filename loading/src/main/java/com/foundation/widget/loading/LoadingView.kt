@@ -1,21 +1,21 @@
 package com.foundation.widget.loading
 
-import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.DecorContentParent
 
 /**
  *@Desc:
@@ -24,12 +24,13 @@ import androidx.appcompat.widget.AppCompatImageView
  *create by zhusw on 5/6/21 17:08
  */
 private const val ANIM_DURATION = 400L
+private const val ANIM_DURATION_LONG = 800L
 
 class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
     ViewGroup(context, attributeSet) {
     constructor(context: Context) : this(context, null)
 
-    var failViewClickListener: FailViewClickListener? = null
+    var failViewClickListener: (view: View) -> Unit = {}
     var loadingAdapter: LoadingAdapter = NormalLoadingAdapter()
         set(value) {
             println("LoadingViewGroup loadingAdapter set value")
@@ -45,8 +46,8 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
         addView(this)
     }
     private var loadingView: View = ImageView(context).apply {
-        layoutParams = LayoutParams(48.dp, 48.dp)
-        setBackgroundResource(R.drawable.loading_ic_baseline_toys_48)
+        layoutParams = LayoutParams(34.dp, 34.dp)
+        setBackgroundResource(R.drawable.loading_ic_baseline_hourglass_top_48)
         addView(this)
     }
     private var loadingFailView: View = Button(context).apply {
@@ -55,6 +56,9 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
         layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         addView(this)
         visibility = View.GONE
+        setOnClickListener {
+            failViewClickListener.invoke(it)
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -98,14 +102,18 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
                     addView(this)
                 }
             }
-            if(!hideBackgroundImg()){
+            if (!hideBackgroundImg()) {
                 undergroundImg.visibility = View.VISIBLE
                 getLoadingBackground()?.let {
                     undergroundImg.background = it
                 }
             }
-            getLoadingFailEventView()?.setOnClickListener {
-                failViewClickListener?.onClick(it)
+            getLoadingFailEventView()?.let {
+                removeView(loadingFailView)
+                loadingFailView = it
+                setOnClickListener { v ->
+                    failViewClickListener.invoke(v)
+                }
             }
         }
 
@@ -123,9 +131,9 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
         }
         with(loadingView) {
             if (visibility != View.VISIBLE) visibility = View.VISIBLE
-            if(alpha != 1F) alpha = 1F
+            if (alpha != 1F) alpha = 1F
         }
-        if(!loadingAdapter.hideBackgroundImg()){
+        if (!loadingAdapter.hideBackgroundImg()) {
             with(undergroundImg) {
                 if (visibility != View.VISIBLE) visibility = View.VISIBLE
             }
@@ -134,15 +142,16 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
         animate().alpha(1F).setDuration(ANIM_DURATION)
             .start()
     }
-    fun showLoadingFail(hideBackground:Boolean){
+
+    fun showLoadingFail(hideBackground: Boolean) {
         loadingView.animation?.cancel()
         loadingView.animate()
             .alpha(0F)
             .setDuration(ANIM_DURATION)
             .withEndAction {
                 alpha = 1F
-                visibility =View.VISIBLE
-                if(hideBackground){
+                visibility = View.VISIBLE
+                if (hideBackground) {
                     undergroundImg.run {
                         if (visibility == View.VISIBLE) visibility = View.GONE
                     }
@@ -176,7 +185,7 @@ interface FailViewClickListener {
     fun onClick(view: View);
 }
 
-private class NormalLoadingAdapter:LoadingAdapter{
+private class NormalLoadingAdapter : LoadingAdapter {
     override fun hideBackgroundImg(): Boolean {
         return true
     }
@@ -199,17 +208,17 @@ private class NormalLoadingAdapter:LoadingAdapter{
 
     override fun onShowLoading(loadingView: View) {
         loadingView.animation?.cancel()
-        ObjectAnimator.ofFloat(loadingView,"rotation",0F,361F).apply {
+        ObjectAnimator.ofFloat(loadingView, "rotationX", 0F, 180F).apply {
             repeatCount = Animation.INFINITE
-            duration = ANIM_DURATION
+            duration = ANIM_DURATION_LONG
             repeatMode = ValueAnimator.RESTART
-            interpolator = LinearInterpolator()
+            interpolator = AccelerateDecelerateInterpolator()
             start()
         }
-        ObjectAnimator.ofFloat(loadingView,"alpha",0.2F,1F).apply {
+        ObjectAnimator.ofFloat(loadingView, "alpha", 0.2F, 0.8F).apply {
             repeatCount = Animation.INFINITE
             repeatMode = ValueAnimator.REVERSE
-            duration = ANIM_DURATION
+            duration = ANIM_DURATION_LONG
             start()
         }
     }
