@@ -11,20 +11,19 @@ import androidx.appcompat.widget.AppCompatImageView
 
 /**
  *@Desc:
- *- loading
- *-
+ *- loading View,虽然是个容器。但是不可以再添加子view
  *create by zhusw on 5/6/21 17:08
  */
 private const val ANIM_DURATION = 400L
 
-class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
+class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     ViewGroup(context, attributeSet) {
     constructor(context: Context) : this(context, null)
 
     var failViewClickListener: (view: View) -> Unit = {}
-    var loadingAdapter: PageLoadingAdapter = NormalLoadingAdapter()
+    var loadingAdapter: PageLoadingAdapter = NormalLoadingAdapter(context)
         set(value) {
-            println("LoadingViewGroup loadingAdapter set value")
+            "PageLoadingView loadingAdapter  set(value) {".log(":PageLoadingView")
             field = value
             postOnAnimation {
                 resetLayout()
@@ -42,7 +41,7 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
         addView(this)
     }
     private var loadingFailView: View = Button(context).apply {
-        text = "加载失败"
+        text = "点击重试"
         gravity = Gravity.CENTER
         layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         addView(this)
@@ -94,7 +93,7 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
                     addView(this)
                 }
             }
-            if (!hideBackgroundImg()) {
+            if (showBackgroundImg()) {
                 undergroundImg.visibility = View.VISIBLE
                 getLoadingBackground()?.let {
                     undergroundImg.background = it
@@ -116,15 +115,16 @@ class LoadingViewGroup(context: Context, attributeSet: AttributeSet?) :
     fun showLoading() {
         alpha = 0F
         visibility = View.VISIBLE
-        with(loadingFailView) {
+        loadingFailView.run {
             if (visibility == View.VISIBLE) visibility = View.GONE
         }
-        with(loadingView) {
+        loadingView.run {
             if (visibility != View.VISIBLE) visibility = View.VISIBLE
             if (alpha != 1F) alpha = 1F
         }
-        if (!loadingAdapter.hideBackgroundImg()) {
-            with(undergroundImg) {
+
+        if (loadingAdapter.showBackgroundImg()) {
+            undergroundImg.run {
                 if (visibility != View.VISIBLE) visibility = View.VISIBLE
             }
         }

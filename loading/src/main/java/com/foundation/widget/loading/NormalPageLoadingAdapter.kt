@@ -2,11 +2,13 @@ package com.foundation.widget.loading
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.SparseArray
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
+import androidx.core.content.ContextCompat
 import androidx.core.util.forEach
 
 /**
@@ -16,27 +18,21 @@ import androidx.core.util.forEach
  *create by zhusw on 5/7/21 14:57
  */
 private const val ANIM_DURATION_LONG = 800L
-class NormalLoadingAdapter : PageLoadingAdapter {
+
+class NormalLoadingAdapter(private val context: Context) : PageLoadingAdapter {
     private val animCache: SparseArray<ObjectAnimator> = SparseArray()
-    override fun hideBackgroundImg(): Boolean {
-        return true
-    }
+    private val loadingBackgroundDrawable =
+        ContextCompat.getDrawable(context, R.drawable.loading_sp_bg)
 
-    override fun getLoadingBackground(): Drawable? {
-        return null
-    }
+    override fun showBackgroundImg(): Boolean = false
 
-    override fun getLoadingView(): View? {
-        return null
-    }
+    override fun getLoadingBackground(): Drawable? = loadingBackgroundDrawable
 
-    override fun getLoadingFailView(): View? {
-        return null
-    }
+    override fun getLoadingView(): View? = null
 
-    override fun getLoadingFailEventView(): View? {
-        return null
-    }
+    override fun getLoadingFailView(): View? = null
+
+    override fun getLoadingFailEventView(): View? = null
 
     /**
      * 属性动画 默认是弱引用的，不必考虑释放问题

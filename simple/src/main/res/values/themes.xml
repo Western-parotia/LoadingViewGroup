@@ -1,14 +1,14 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-<!--    <style name="Theme.LoadingViewGroup" parent="Theme.MaterialComponents.Light.NoActionBar">-->
-<!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
-<!--        <item name="colorPrimary">@color/purple_500</item>-->
-<!--        <item name="colorPrimaryVariant">@color/purple_700</item>-->
-<!--        <item name="colorOnPrimary">@color/white</item>-->
-<!--        <item name="colorPrimaryDark">@color/purple_200</item>-->
-<!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
-<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryDark</item>-->
+    <!--    <style name="Theme.PageLoadingView" parent="Theme.MaterialComponents.Light.NoActionBar">-->
+    <!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
+    <!--        <item name="colorPrimary">@color/purple_500</item>-->
+    <!--        <item name="colorPrimaryVariant">@color/purple_700</item>-->
+    <!--        <item name="colorOnPrimary">@color/white</item>-->
+    <!--        <item name="colorPrimaryDark">@color/purple_200</item>-->
+    <!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
+    <!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryDark</item>-->
 
-<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
 <!--    </style>-->
 </resources>

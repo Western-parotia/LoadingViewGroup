@@ -2,17 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-<com.foundation.widget.loading.LoadingViewGroup
-    android:id="@+id/lv"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1">
+
+        <com.foundation.widget.loading.PageLoadingView
+            android:id="@+id/lv"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+        <com.foundation.widget.loading.LoadingConstraintLayout
+            android:id="@+id/lc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:text="@string/long_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                app:layout_constraintTop_toBottomOf="@+id/tv"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/ic_launcher_background"
+                app:layout_constraintBottom_toBottomOf="parent"></ImageView>
+
+        </com.foundation.widget.loading.LoadingConstraintLayout>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
+
         <Button
             android:id="@+id/btn_start"
             android:layout_width="wrap_content"
@@ -34,6 +67,5 @@
             android:text="显示"
             android:layout_height="wrap_content"/>
     </LinearLayout>
-
 
 </LinearLayout>

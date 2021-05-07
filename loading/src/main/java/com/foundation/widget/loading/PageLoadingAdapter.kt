@@ -9,7 +9,7 @@ import android.view.View
  *create by zhusw on 5/7/21 09:37
  */
 interface PageLoadingAdapter {
-    fun hideBackgroundImg(): Boolean
+    fun showBackgroundImg(): Boolean
     fun getLoadingBackground(): Drawable?
     fun getLoadingView(): View?
     fun getLoadingFailView(): View?
