@@ -22,7 +22,7 @@ open class NormalLoadingAdapter(private val context: Context) : PageLoadingAdapt
     private val animCache: SparseArray<ObjectAnimator> = SparseArray()
     override fun showBackgroundImg(): Boolean = false
 
-    override fun getLoadingBackground(): Drawable? = null
+    override fun getBackground(): Drawable? = null
 
     override fun getLoadingView(): View? = null
 

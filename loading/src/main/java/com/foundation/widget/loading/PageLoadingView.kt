@@ -95,7 +95,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             }
             if (showBackgroundImg()) {
                 undergroundImg.visibility = View.VISIBLE
-                getLoadingBackground()?.let {
+                getBackground()?.let {
                     undergroundImg.background = it
                 }
             }

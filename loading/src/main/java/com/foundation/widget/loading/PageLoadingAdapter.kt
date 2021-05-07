@@ -10,7 +10,7 @@ import android.view.View
  */
 interface PageLoadingAdapter {
     fun showBackgroundImg(): Boolean
-    fun getLoadingBackground(): Drawable?
+    fun getBackground(): Drawable?
     fun getLoadingView(): View?
     fun getLoadingFailView(): View?
 
