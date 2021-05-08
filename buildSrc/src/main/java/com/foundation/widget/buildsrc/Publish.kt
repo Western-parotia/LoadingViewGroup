@@ -1,4 +1,5 @@
 package com.foundation.widget.buildsrc
+
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,20 +9,43 @@ import java.util.*
  *-
  *create by zhusw on 5/6/21 16:43
  */
+
+private const val VERSION = "1.0"
+private const val SNAPSHOT = true
+
 object Publish {
-    object Version{
+    object Version {
         private val timeStamp = getTimeStamp()
-        get() {
-            "timeStamp: $field".log("Publish===")
-              return field
-        }
+            get() {
+                "timeStamp: $field".log("Publish===")
+                return field
+            }
+        var versionName = VERSION
+            private set
+            get() = when (SNAPSHOT) {
+                true -> "$field-SNAPSHOT"
+                false -> field
+            }
         const val versionCode = 1
-        const val versionName = "1.0"
         var versionTimeStamp = "$versionName-$timeStamp"
-        private set
+            private set
+    }
+
+    object Maven {
+        val codingArtifactsRepoUrl =
+            "https://mijukeji-maven.pkg.coding.net/repository/jileiku/base_maven/"
+        val codingArtifactsGradleUsername = "base_maven-1620455955399"
+        val codingArtifactsGradlePassword = "cf195a4e8b93afea3e5e0f6e538f62687c67cee7"
+
+        val groupId = "com.foundation.widget"
+        val artifactId = "loading"
+
     }
 
 }
 private fun getTimeStamp():String{
-   return SimpleDateFormat("yyyy-mm-HH-mm-ss", Locale.CHINA).format(Date(System.currentTimeMillis()))
+    return SimpleDateFormat(
+        "yyyy-MM-dd hh:mm:ss",
+        Locale.CHINA
+    ).format(Date(System.currentTimeMillis()))
 }
