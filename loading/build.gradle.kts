@@ -1,4 +1,5 @@
-import com.foundation.widget.buildsrc.*
+import com.foundation.widget.buildsrc.Dependencies
+import com.foundation.widget.buildsrc.Publish
 
 plugins {
     id("com.android.library")
@@ -32,10 +33,8 @@ android {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(Dependencies.Kotlin.kotlin_stdlib)
     implementation(Dependencies.AndroidX.core_ktx)
     implementation(Dependencies.AndroidX.appcompat)
-    implementation(Dependencies.Material.material)
     implementation(Dependencies.AndroidX.constraintlayout)
 }
