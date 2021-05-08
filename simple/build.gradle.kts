@@ -62,8 +62,18 @@ dependencies {
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.Material.material)
     implementation(Dependencies.AndroidX.constraintlayout)
-    implementation(project(":loading"))
-    implementation(Dependencies.Glide.glide)
-    implementation(Dependencies.Glide.compiler)
+    implementation("com.foundation.widget:loading:1.0-SNAPSHOT")
+//    implementation(project(":loading"))
+//    implementation(Dependencies.Glide.glide)
+//    implementation(Dependencies.Glide.compiler)
 
+}
+repositories {
+    maven {
+        setUrl(com.foundation.widget.buildsrc.Publish.Maven.codingArtifactsRepoUrl)
+        credentials {
+            username = com.foundation.widget.buildsrc.Publish.Maven.codingArtifactsGradleUsername
+            password = com.foundation.widget.buildsrc.Publish.Maven.codingArtifactsGradlePassword
+        }
+    }
 }

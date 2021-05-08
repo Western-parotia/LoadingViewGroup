@@ -6,6 +6,7 @@ plugins {
     id("kotlin-android")
     `maven-publish`
 }
+
 apply("common.gradle")
 android {
     buildTypes {
@@ -44,8 +45,13 @@ dependencies {
     implementation(Dependencies.AndroidX.core_ktx)
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.AndroidX.constraintlayout)
+    implementation(Dependencies.Glide.glide)
 }
 
+val sourceCode = tasks.register("sourceCode", org.gradle.jvm.tasks.Jar::class.java) {
+    from(android.sourceSets.getByName("main").java.srcDirs)
+    classifier = "sources"
+}.get()
 
 publishing {
     val versionName = Publish.Version.versionName
@@ -57,7 +63,24 @@ publishing {
             setGroupId(groupId)
             setArtifactId(artifactId)
             version = versionName
-            artifact("$buildDir/outputs/aar/loading-release.aar")
+            artifact(sourceCode)
+            afterEvaluate {
+                artifact(tasks.getByName("bundleReleaseAar"))
+            }
+//            artifact("$buildDir/outputs/aar/loading-release.aar")//直接制定文件
+            " allDependencies=${configurations.implementation.get().allDependencies.size}".log("dep============")
+            pom.withXml {
+                val dependenciesNode = asNode().appendNode("dependencies")
+                configurations.implementation.get().allDependencies.forEach {
+                    if (it.version != "unspecified" && it.name != "unspecified") {
+                        val depNode = dependenciesNode.appendNode("dependency")
+                        depNode.appendNode("groupId", it.group)
+                        depNode.appendNode("artifactId", it.name)
+                        depNode.appendNode("version", it.version)
+                    }
+                }
+            }
+
         }
         repositories {
             maven {
@@ -69,14 +92,7 @@ publishing {
             }
         }
     }
-    tasks.getByName("assemble").doFirst {
-        "maven Task: assembleRelease doFirst".log("task==============")
-    }
-    tasks.filter {
-        it.name.contains("ToMaven")
-    }.forEach { t ->
-        t.dependsOn(tasks.getByName("assemble"))
-    }
+
 }
 
 
