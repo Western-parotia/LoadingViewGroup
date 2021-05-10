@@ -2,9 +2,9 @@ package com.foundation.widget.simple
 
 import android.content.Context
 import android.graphics.drawable.Animatable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
@@ -18,48 +18,57 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.lc.loadingView.loadingAdapter = MyContentLoadingAdapter(this)
-        binding.lv2.loadingAdapter = DiyLoading(this)
+        binding.contentLoading.setLoadingAdapter(MyContentLoadingAdapter(this))
+        binding.contentLoading.failViewClickListener = { _: View, _: Int, _: Any? ->
+            Toast.makeText(this, "lc fail click", Toast.LENGTH_LONG).show()
+        }
+        binding.diyLoading.setLoadingAdapter(DiyLoading(this))
 
         binding.btnStart.setOnClickListener {
-            binding.lv.showLoading()
-            binding.lv2.showLoading()
-            binding.lc.loadingView.showLoading()
+            binding.normalLoading.showLoading()
+            binding.diyLoading.showLoading(true)
+            binding.contentLoading.showLoading(true)
         }
         binding.btnStop.setOnClickListener {
-            binding.lv.stop()
-            binding.lv2.stop()
-            binding.lc.loadingView.stop()
+            binding.normalLoading.stop()
+            binding.diyLoading.stop()
+            binding.contentLoading.stop()
         }
         binding.btnShowFail.setOnClickListener {
-            binding.lv.showLoadingFail(true)
-            binding.lv2.showLoadingFail(false)
-            binding.lc.loadingView.showLoadingFail(true)
+            binding.normalLoading.showLoadingFail()
+            binding.diyLoading.showLoadingFail(false)
+            binding.contentLoading.showLoadingFail(false)
         }
-        binding.lc.loadingView.failViewClickListener = {
-            Toast.makeText(MainActivity@ this, "lc fail click", Toast.LENGTH_LONG).show()
-        }
-        binding.lv.failViewClickListener = {
-            Toast.makeText(MainActivity@ this, "lv fail click", Toast.LENGTH_LONG).show()
+
+        binding.normalLoading.failViewClickListener = { _: View, _: Int, _: Any? ->
+            Toast.makeText(this, "lv fail click", Toast.LENGTH_LONG).show()
         }
         binding.btnShow.setOnClickListener {
-            binding.lv.checkLoadingState()
-            binding.lc.loadingView.checkLoadingState()
+            binding.normalLoading.checkLoadingState()
+            binding.contentLoading.checkLoadingState()
         }
     }
 
 }
 
+/**
+ * 设置骨架图
+ */
 class MyContentLoadingAdapter(private val context: Context) : NormalLoadingAdapter(context) {
-    override fun showBackgroundImg(): Boolean = true
 
-    //    override fun getBackground(): Drawable? {
-//        return ContextCompat.getDrawable(context, R.drawable.img_skeleton_screen)
-//    }
-    override fun getBackground(): Drawable? = null
+    override fun getBottomPlateView(): View {
+        return AppCompatImageView(context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            background = ContextCompat.getDrawable(context, R.drawable.img_skeleton_screen)
+        }
+    }
 }
 
 /**
+ * 自定义动画
  * 使用svg 作为loading 动画
  */
 class DiyLoading(private val context: Context) : PageLoadingAdapter {
@@ -67,10 +76,14 @@ class DiyLoading(private val context: Context) : PageLoadingAdapter {
         background = ContextCompat.getDrawable(context, R.drawable.dw_loading)
     }
 
-    override fun showBackgroundImg(): Boolean = true
-
-    override fun getBackground(): Drawable? {
-        return ContextCompat.getDrawable(context, R.drawable.sp_loading_bg2)
+    override fun getBottomPlateView(): View {
+        return AppCompatImageView(context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            background = ContextCompat.getDrawable(context, R.drawable.sp_loading_bg2)
+        }
     }
 
     override fun getLoadingFailView(): View? {
@@ -87,8 +100,15 @@ class DiyLoading(private val context: Context) : PageLoadingAdapter {
         }
     }
 
-    override fun onShowFail(failView: View, type: Int, extra: Any?) {
-
+    override fun onShowFail(
+        failView: View,
+        type: Int,
+        extra: Any?,
+        failViewEvent: (view: View, type: Int, extra: Any?) -> Unit
+    ) {
+        failView.setOnClickListener {
+            failViewEvent.invoke(failView, type, extra)
+        }
     }
 
     override fun onStop(loadingView: View?, failView: View?) {

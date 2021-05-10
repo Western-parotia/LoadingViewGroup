@@ -2,34 +2,27 @@ package com.foundation.widget.loading
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import androidx.appcompat.widget.AppCompatImageView
 
 /**
  *@Desc:
- *- loading View,虽然是个容器。但是不可以再添加子view
+ *- loading View,虽然是个容器。再添额外的子view是无效的
+ *- 它只会测量和拜访内置的子view
  *create by zhusw on 5/6/21 17:08
  */
 private const val ANIM_DURATION = 400L
 
 class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
-    ViewGroup(context, attributeSet) {
+    ViewGroup(context, attributeSet), IPageLoading {
     constructor(context: Context) : this(context, null)
 
-    var failViewClickListener: (view: View) -> Unit = {}
-    var loadingAdapter: PageLoadingAdapter = NormalLoadingAdapter(context)
-        set(value) {
-            field = value
-            resetLayout()
-        }
+    private var adapter: PageLoadingAdapter = NormalLoadingAdapter(context)
 
-    private val undergroundImg = AppCompatImageView(context).apply {
-        scaleType = ImageView.ScaleType.CENTER_CROP
-        layoutParams = LayoutParams(MATCH_PART, MATCH_PART)
+    private var bottomPlateView: View = View(context).apply {
+        layoutParams = LayoutParams(1.dp, 1.dp)
         addView(this)
     }
     private var loadingView: View = ImageView(context).apply {
@@ -39,31 +32,33 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
     private var failView: View = Button(context).apply {
         text = "点击重试"
-        gravity = Gravity.CENTER
         layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         addView(this)
         visibility = View.GONE
-        setOnClickListener {
-            failViewClickListener.invoke(it)
-        }
+    }
+    override var failViewClickListener: (view: View, type: Int, extra: Any?) -> Unit =
+        { view: View, i: Int, any: Any? -> }
+
+    override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
+        adapter = loadingAdapter
+        resetLayout()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        undergroundImg.autoMeasure(this)
+        bottomPlateView.autoMeasure(this)
         loadingView.autoMeasure(this)
         failView.autoMeasure(this)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        undergroundImg.autoLayoutToCenter(this)
+        bottomPlateView.autoLayoutToCenter(this)
         loadingView.autoLayoutToCenter(this)
         failView.autoLayoutToCenter(this)
     }
 
     override fun onDetachedFromWindow() {
-        "onDetachedFromWindow hashcode = ${hashCode()}".log("PageLoadingView")
-        loadingAdapter.onStop(loadingView, failView)
+        adapter.onStop(loadingView, failView)
         animation?.cancel()
         for (i in 0 until childCount) {
             val view = getChildAt(i)
@@ -73,32 +68,27 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     private fun resetLayout() {
-        loadingAdapter.run {
+        adapter.run {
             getLoadingView()?.let {
                 removeView(loadingView)
                 loadingView = it
-                loadingView.apply {
-                    layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-                    addView(this)
-                }
+                addView(loadingView)
+            }
+            getBottomPlateView()?.let {
+                removeView(bottomPlateView)
+                bottomPlateView = it
+                //就算先添加 BottomPlateView 偶尔也会出现遮挡loading 主动修正一下
+                bottomPlateView.elevation = loadingView.elevation - 0.1F
+                addView(bottomPlateView)
             }
             getLoadingFailView()?.let {
                 removeView(failView)
-                failView = it
-                failView.apply {
-                    layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-                    visibility = View.INVISIBLE
-                    addView(this)
+                failView = it.apply {
+                    visibility = View.GONE
                 }
-            }
-            if (showBackgroundImg()) {
-                undergroundImg.visibility = View.VISIBLE
-                getBackground()?.let {
-                    undergroundImg.background = it
-                }
+                addView(failView)
             }
         }
-
     }
 
     /**
@@ -106,33 +96,26 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      * 在动画结束后回调[PageLoadingAdapter.onShowLoading]
      * 收到回调后最好立即开始执行动画，此时loadingView一定是可见的
      */
-    fun showLoading() {
+    override fun showLoading(showBottomPlate: Boolean) {
+        "showLoading showBottomPlate=$showBottomPlate".log()
         alpha = 0F
         visibility = View.VISIBLE
-        failView.run {
-            if (visibility == View.VISIBLE) visibility = View.GONE
-        }
+        failView.visibility = View.GONE
+        bottomPlateView.visibility = if (showBottomPlate) View.VISIBLE else View.GONE
         loadingView.run {
-            if (visibility != View.VISIBLE) visibility = View.VISIBLE
+            visibility = View.VISIBLE
             if (alpha != 1F) alpha = 1F
-        }
-
-        if (loadingAdapter.showBackgroundImg()) {
-            undergroundImg.run {
-                if (visibility != View.VISIBLE) visibility = View.VISIBLE
-            }
         }
         animate()
             .alpha(1F)
             .setDuration(ANIM_DURATION)
             .withEndAction {
-                loadingAdapter.onShowLoading(loadingView)
+                adapter.onShowLoading(loadingView)
             }
             .start()
     }
 
-    @JvmOverloads
-    fun showLoadingFail(hideBackground: Boolean = true, type: Int = 0, extra: Any? = null) {
+    override fun showLoadingFail(hideBackground: Boolean, type: Int, extra: Any?) {
         loadingView.animation?.cancel()
         loadingView.animate()
             .alpha(0F)
@@ -141,17 +124,11 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 alpha = 1F
                 visibility = View.VISIBLE
                 if (hideBackground) {
-                    undergroundImg.run {
-                        if (visibility == View.VISIBLE) visibility = View.GONE
-                    }
+                    bottomPlateView.visibility = View.GONE
                 }
-                loadingView.run {
-                    if (visibility == View.VISIBLE) visibility = View.GONE
-                }
-                failView.run {
-                    if (visibility != View.VISIBLE) visibility = View.VISIBLE
-                }
-                loadingAdapter.onShowFail(failView, type, extra)
+                loadingView.visibility = View.GONE
+                failView.visibility = View.VISIBLE
+                adapter.onShowFail(failView, type, extra, failViewClickListener)
             }
             .start()
     }
@@ -159,16 +136,18 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     /**
      * 整体停止并隐藏
      */
-    fun stop() {
+    override fun stop() {
         animate()
             .alpha(0F)
             .setDuration(ANIM_DURATION)
             .withEndAction {
                 visibility = View.GONE
-                loadingAdapter.onStop(loadingView, failView)
+                adapter.onStop(loadingView, failView)
             }
             .start()
     }
+
+    override fun asLoading(): IPageLoading = this
 
     /**
      * 立即显示当前view状态，用于检查停止后的view 状态

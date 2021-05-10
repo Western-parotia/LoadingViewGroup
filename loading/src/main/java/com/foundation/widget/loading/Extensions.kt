@@ -11,7 +11,7 @@ import android.view.ViewGroup
  *create by zhusw on 5/6/21 18:08
  */
 private const val TAG ="BaseLoadingWidget"
-internal fun String.log(secTAG: String){
+internal fun String.log(secTAG: String = "") {
     if (BuildConfig.DEBUG) {
         println("$TAG : $secTAG $this")
     }
@@ -29,21 +29,21 @@ internal fun Int.toAtMostMeasureSpec():Int{
 }
 
 internal fun View.defaultWidthMeasureSpec(parentView: ViewGroup):Int{
-    return when(layoutParams.width){
-        ViewGroup.LayoutParams.MATCH_PARENT -> parentView.measuredWidth.toExactlyMeasureSpec()
-        ViewGroup.LayoutParams.WRAP_CONTENT -> parentView.measuredWidth.toAtMostMeasureSpec()
+    return when (layoutParams.width) {
+        MATCH_PART -> parentView.measuredWidth.toExactlyMeasureSpec()
+        WRAP_CONTENT -> WRAP_CONTENT.toAtMostMeasureSpec()
         0 -> throw IllegalAccessException("need special treatment for $parentView width")
-        else ->{
+        else -> {
             layoutParams.width.toExactlyMeasureSpec()
         }
     }
 }
 internal fun View.defaultHeightMeasureSpec(parentView: ViewGroup):Int{
-    return when(layoutParams.height){
-        ViewGroup.LayoutParams.MATCH_PARENT -> parentView.measuredHeight.toExactlyMeasureSpec()
-        ViewGroup.LayoutParams.WRAP_CONTENT -> parentView.measuredHeight.toAtMostMeasureSpec()
+    return when (layoutParams.height) {
+        MATCH_PART -> parentView.measuredHeight.toExactlyMeasureSpec()
+        WRAP_CONTENT -> WRAP_CONTENT.toAtMostMeasureSpec()
         0 -> throw IllegalAccessException("need special treatment for $parentView height")
-        else ->{
+        else -> {
             layoutParams.height.toExactlyMeasureSpec()
         }
     }

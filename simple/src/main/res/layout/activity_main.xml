@@ -14,24 +14,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:layout_height="wrap_content">
+            android:layout_height="200dp">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:background="@mipmap/ic_launcher"
+                    android:layout_height="match_parent" />
+
+                <com.foundation.widget.loading.PageLoadingView
+                    android:layout_gravity="center"
+                    android:id="@+id/normalLoading"
+                    android:background="#eeaacd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
 
             <com.foundation.widget.loading.PageLoadingView
-                android:id="@+id/lv"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
-
-            <com.foundation.widget.loading.PageLoadingView
-                android:id="@+id/lv2"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
+                android:id="@+id/diyLoading"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <com.foundation.widget.loading.LoadingConstraintLayout
-            android:id="@+id/lc"
+            android:id="@+id/contentLoading"
             android:layout_width="wrap_content"
             android:background="#dda"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_avatar"

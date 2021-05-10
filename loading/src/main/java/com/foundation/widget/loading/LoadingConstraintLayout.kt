@@ -7,20 +7,20 @@ import androidx.constraintlayout.widget.ConstraintLayout
 
 /**
  *@Desc:
- *- 主动或自动装载一个loading view 在最上层
- *- 如果在xml 主动加入了loading view，将不会再创建新的目标
+ * 可作为根容器的viewGroup
+ * 主动或自动装载一个loading view 在最上层
+ * 如果在xml 主动加入了loading view，将不会再创建新的目标
  *create by zhusw on 5/7/21 15:08
  */
-class LoadingConstraintLayout : ConstraintLayout {
+class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
     private var _loadingView: PageLoadingView? = null
-    val loadingView get() = _loadingView!!
+    private val loadingView get() = _loadingView!!
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet)
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        "onFinishInflate".log("PageLoadingView")
         //检查xml中的loading view
         for (i in 0..childCount) {
             val view = getChildAt(i)
@@ -41,4 +41,30 @@ class LoadingConstraintLayout : ConstraintLayout {
         }
     }
 
+    override fun asLoading(): IPageLoading = this
+    override var failViewClickListener: (view: View, type: Int, extra: Any?) -> Unit
+        get() = loadingView.failViewClickListener
+        set(value) {
+            loadingView.failViewClickListener = value
+        }
+
+    override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
+        loadingView.setLoadingAdapter(loadingAdapter)
+    }
+
+    override fun showLoading(showBottomPlate: Boolean) {
+        loadingView.showLoading(showBottomPlate)
+    }
+
+    override fun showLoadingFail(hideBackground: Boolean, type: Int, extra: Any?) {
+        loadingView.showLoadingFail(hideBackground, type, extra)
+    }
+
+    override fun stop() {
+        loadingView.stop()
+    }
+
+    fun checkLoadingState() {
+        loadingView.checkLoadingState()
+    }
 }

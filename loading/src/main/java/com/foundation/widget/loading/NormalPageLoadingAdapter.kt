@@ -3,7 +3,6 @@ package com.foundation.widget.loading
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.SparseArray
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -19,12 +18,8 @@ private const val ANIM_DURATION_LONG = 800L
 
 open class NormalLoadingAdapter(private val context: Context) : PageLoadingAdapter {
     private val animCache: SparseArray<ObjectAnimator> = SparseArray()
-    override fun showBackgroundImg(): Boolean = false
-
-    override fun getBackground(): Drawable? = null
-
+    override fun getBottomPlateView(): View? = null
     override fun getLoadingView(): View? = null
-
     override fun getLoadingFailView(): View? = null
 
     /**
@@ -50,8 +45,15 @@ open class NormalLoadingAdapter(private val context: Context) : PageLoadingAdapt
         }
     }
 
-    override fun onShowFail(failView: View, type: Int, extra: Any?) {
-
+    override fun onShowFail(
+        failView: View,
+        type: Int,
+        extra: Any?,
+        failViewEvent: (view: View, type: Int, extra: Any?) -> Unit
+    ) {
+        failView.setOnClickListener {
+            failViewEvent.invoke(failView, type, extra)
+        }
     }
 
     override fun onStop(loadingView: View?, failView: View?) {
