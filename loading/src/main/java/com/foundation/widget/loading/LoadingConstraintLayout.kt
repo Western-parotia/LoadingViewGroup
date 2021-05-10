@@ -20,6 +20,7 @@ class LoadingConstraintLayout : ConstraintLayout {
 
     override fun onFinishInflate() {
         super.onFinishInflate()
+        "onFinishInflate".log("PageLoadingView")
         //检查xml中的loading view
         for (i in 0..childCount) {
             val view = getChildAt(i)
