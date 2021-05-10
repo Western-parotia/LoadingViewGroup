@@ -42,10 +42,10 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
     }
 
     override fun asLoading(): IPageLoading = this
-    override var failViewClickListener: (view: View, type: Int, extra: Any?) -> Unit
-        get() = loadingView.failViewClickListener
+    override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit
+        get() = loadingView.failViewEventListener
         set(value) {
-            loadingView.failViewClickListener = value
+            loadingView.failViewEventListener = value
         }
 
     override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
@@ -56,8 +56,8 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
         loadingView.showLoading(showBottomPlate)
     }
 
-    override fun showLoadingFail(hideBackground: Boolean, type: Int, extra: Any?) {
-        loadingView.showLoadingFail(hideBackground, type, extra)
+    override fun showLoadingFail(showBottomPlate: Boolean, type: Int, extra: Any?) {
+        loadingView.showLoadingFail(showBottomPlate, type, extra)
     }
 
     override fun stop() {

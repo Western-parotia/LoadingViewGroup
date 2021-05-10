@@ -23,34 +23,29 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:background="@mipmap/ic_launcher"
+                    android:background="@drawable/old_man"
+                    android:scaleType="fitXY"
                     android:layout_height="match_parent" />
 
                 <com.foundation.widget.loading.PageLoadingView
                     android:layout_gravity="center"
                     android:id="@+id/normalLoading"
-                    android:background="#eeaacd"
+                    android:background="#AFFFFFFF"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </FrameLayout>
 
-            <com.foundation.widget.loading.PageLoadingView
-                android:id="@+id/diyLoading"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent" />
         </LinearLayout>
 
         <com.foundation.widget.loading.LoadingConstraintLayout
             android:id="@+id/contentLoading"
             android:layout_width="wrap_content"
-            android:background="#dda"
             android:layout_height="match_parent">
-
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_avatar"
                 app:shapeAppearanceOverlay="@style/circleStyle"
-                android:background="@drawable/ic_launcher_background"
+                android:background="@drawable/avatar"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginLeft="20dp"
@@ -80,7 +75,7 @@
                 android:layout_width="match_parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_height="300dp"
-                android:background="@drawable/ic_launcher_background" />
+                android:background="@drawable/girl" />
 
         </com.foundation.widget.loading.LoadingConstraintLayout>
     </LinearLayout>

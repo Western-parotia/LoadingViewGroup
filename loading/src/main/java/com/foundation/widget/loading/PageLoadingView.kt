@@ -36,7 +36,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         addView(this)
         visibility = View.GONE
     }
-    override var failViewClickListener: (view: View, type: Int, extra: Any?) -> Unit =
+    override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit =
         { view: View, i: Int, any: Any? -> }
 
     override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
@@ -115,7 +115,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             .start()
     }
 
-    override fun showLoadingFail(hideBackground: Boolean, type: Int, extra: Any?) {
+    override fun showLoadingFail(showBottomPlate: Boolean, type: Int, extra: Any?) {
         loadingView.animation?.cancel()
         loadingView.animate()
             .alpha(0F)
@@ -123,12 +123,10 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             .withEndAction {
                 alpha = 1F
                 visibility = View.VISIBLE
-                if (hideBackground) {
-                    bottomPlateView.visibility = View.GONE
-                }
+                bottomPlateView.visibility = if (showBottomPlate) View.VISIBLE else View.GONE
                 loadingView.visibility = View.GONE
                 failView.visibility = View.VISIBLE
-                adapter.onShowFail(failView, type, extra, failViewClickListener)
+                adapter.onShowFail(failView, type, extra, failViewEventListener)
             }
             .start()
     }

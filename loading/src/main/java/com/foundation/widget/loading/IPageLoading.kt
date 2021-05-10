@@ -10,10 +10,15 @@ import android.view.View
  * create by zhusw on 5/10/21 14:02
  */
 interface IPageLoading {
-    var failViewClickListener: (view: View, type: Int, extra: Any?) -> Unit
+    var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit
     fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter)
-    fun showLoading(showBottomPlate: Boolean = false)
-    fun showLoadingFail(hideBackground: Boolean = true, type: Int = 0, extra: Any? = null)
+    fun showLoading(showBottomPlate: Boolean = true)
+
+    /**
+     * type 与 extra 将在failViewEventListener中进行回传
+     * 便于处理不同失败状态的响应事件
+     */
+    fun showLoadingFail(showBottomPlate: Boolean = true, type: Int = 0, extra: Any? = null)
     fun stop()
     fun asLoading(): IPageLoading
 }
