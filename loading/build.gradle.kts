@@ -52,9 +52,6 @@ dependencies {
 }
 
 val sourceCodeTask: Jar = tasks.register("sourceCode", Jar::class.java) {
-    doFirst {
-        "sourceCodeTask do last".log("==========================")
-    }
     from(android.sourceSets.getByName("main").java.srcDirs)
     classifier = "sources"
 }.get()
@@ -71,11 +68,9 @@ publishing {
             setArtifactId(artifactId)
             version = versionName
             artifact(sourceCodeTask)
-
             afterEvaluate {//在脚本读取完成后绑定
                 val bundleReleaseAarTask: Task = tasks.getByName("bundleReleaseAar") {
                     doLast {
-                        "bundleReleaseAarTask do last".log("==========================")
                         val rt = Runtime.getRuntime()
                         rt.exec("git tag $versionTimeStamp -m autoMake")
                         Thread.sleep(3000)
