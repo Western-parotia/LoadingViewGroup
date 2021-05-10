@@ -1,7 +1,5 @@
 package com.foundation.widget.buildsrc
 
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  *@Desc:
@@ -15,11 +13,6 @@ private const val SNAPSHOT = true
 
 object Publish {
     object Version {
-        private val timeStamp = getTimeStamp()
-            get() {
-                "timeStamp: $field".log("Publish===")
-                return field
-            }
         var versionName = VERSION
             private set
             get() = when (SNAPSHOT) {
@@ -27,8 +20,17 @@ object Publish {
                 false -> field
             }
         const val versionCode = 1
-        var versionTimeStamp = "$versionName-$timeStamp"
-            private set
+
+        fun getTimeStamp(): String {
+            return java.text.SimpleDateFormat(
+                "yyyy-MM-dd-hh-mm-ss",
+                java.util.Locale.CHINA
+            ).format(java.util.Date(System.currentTimeMillis()))
+        }
+
+        fun getVersionTimeStamp(): String {
+            return "$versionName-${getTimeStamp()}"
+        }
     }
 
     object Maven {
@@ -42,10 +44,4 @@ object Publish {
 
     }
 
-}
-private fun getTimeStamp():String{
-    return SimpleDateFormat(
-        "yyyy-MM-dd hh:mm:ss",
-        Locale.CHINA
-    ).format(Date(System.currentTimeMillis()))
 }

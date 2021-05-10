@@ -37,7 +37,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         visibility = View.GONE
     }
     override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit =
-        { view: View, i: Int, any: Any? -> }
+        { _: View, _: Int, _: Any? -> }
 
     override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
         adapter = loadingAdapter

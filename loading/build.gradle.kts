@@ -8,6 +8,9 @@ plugins {
 }
 
 apply("common.gradle")
+
+val versionTimeStamp = Publish.Version.getVersionTimeStamp()
+
 android {
     buildTypes {
         getByName("release") {
@@ -29,7 +32,7 @@ android {
     buildTypes.forEach {
         it.buildConfigField("Integer", "versionCode", Publish.Version.versionCode.toString())
         it.buildConfigField("String", "versionName", "\"${Publish.Version.versionName}\"")
-        it.buildConfigField("String", "versionTimeStamp", "\"${Publish.Version.versionTimeStamp}\"")
+        it.buildConfigField("String", "versionTimeStamp", "\"$versionTimeStamp\"")
     }
     sourceSets {
         getByName("main") {
@@ -48,10 +51,14 @@ dependencies {
     implementation(Dependencies.Glide.glide)
 }
 
-val sourceCode = tasks.register("sourceCode", org.gradle.jvm.tasks.Jar::class.java) {
+val sourceCodeTask: Jar = tasks.register("sourceCode", Jar::class.java) {
+    doFirst {
+        "sourceCodeTask do last".log("==========================")
+    }
     from(android.sourceSets.getByName("main").java.srcDirs)
     classifier = "sources"
 }.get()
+
 
 publishing {
     val versionName = Publish.Version.versionName
@@ -63,9 +70,19 @@ publishing {
             setGroupId(groupId)
             setArtifactId(artifactId)
             version = versionName
-            artifact(sourceCode)
-            afterEvaluate {
-                artifact(tasks.getByName("bundleReleaseAar"))
+            artifact(sourceCodeTask)
+
+            afterEvaluate {//在脚本读取完成后绑定
+                val bundleReleaseAarTask: Task = tasks.getByName("bundleReleaseAar") {
+                    doLast {
+                        "bundleReleaseAarTask do last".log("==========================")
+                        val rt = Runtime.getRuntime()
+                        rt.exec("git tag $versionTimeStamp -m autoMake")
+                        Thread.sleep(3000)
+                        rt.exec("git push origin $versionTimeStamp")
+                    }
+                }
+                artifact(bundleReleaseAarTask)
             }
 //            artifact("$buildDir/outputs/aar/loading-release.aar")//直接制定文件
             " allDependencies=${configurations.implementation.get().allDependencies.size}".log("dep============")

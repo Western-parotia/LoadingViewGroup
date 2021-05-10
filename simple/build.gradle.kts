@@ -51,6 +51,15 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        //版本号会改变
+        cacheDynamicVersionsFor(10, TimeUnit.SECONDS)
+        //版本号不变,1.0-SNAPSHOT 这种应该实时更新
+        cacheChangingModulesFor(10, TimeUnit.SECONDS)
+
+    }
+}
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(Dependencies.Kotlin.kotlin_stdlib)
