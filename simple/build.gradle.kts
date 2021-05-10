@@ -37,14 +37,10 @@ android {
         getByName("debug"){
             signingConfig = signingConfigs.getByName("normalSign")
         }
-        create("dev").initWith(getByName("debug")).run {
-
-        }
     }
     buildFeatures {
         viewBinding = true
     }
-
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

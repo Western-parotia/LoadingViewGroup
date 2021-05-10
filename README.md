@@ -25,13 +25,91 @@ implementation("com.foundation.widget:loading:版本号")
 #### 2.3 自定义
 * 2.3.1 定义适配器
 
+```kotlin
 
+/**
+ * 自定义loading逻辑
+ */
+class MyContentLoadingAdapter(private val context: Context) : PageLoadingAdapter {
+
+    /**
+     * 设置骨架图
+     */
+    override fun getBottomPlateView(): View = AppCompatImageView(context).apply {
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        background = ContextCompat.getDrawable(context, R.drawable.img_skeleton_screen)
+    }
+
+    /**
+     * 自定义加载动画的View
+     */
+    private val loadingView = AppCompatImageView(context).apply {
+        background = ContextCompat.getDrawable(context, R.drawable.dw_loading)
+    }
+
+    override fun getLoadingView(): View? = loadingView
+
+    /**
+     * 展示动画
+     */
+    override fun onShowLoading(loadingView: View) {
+        if (loadingView.background is Animatable) {
+            val anim = loadingView.background as Animatable
+            anim.start()
+        }
+    }
+
+    /**
+     * 设置失败展示
+     */
+    override fun getLoadingFailView(): View? = LayoutInflater
+        .from(context)
+        .inflate(R.layout.fail, null).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+
+    /**
+     * 设置失败响应事件
+     */
+    override fun onShowFail(
+        failView: View,
+        type: Int,
+        extra: Any?,
+        failViewEvent: (view: View, type: Int, extra: Any?) -> Unit
+    ) {
+        failView.findViewById<View>(R.id.btn).setOnClickListener {
+            failViewEvent.invoke(failView, type, extra)
+        }
+    }
+
+    /**
+     * 停止动画
+     */
+    override fun onStop(loadingView: View?, failView: View?) {
+        if (loadingView?.background is Animatable) {
+            val anim = loadingView.background as Animatable
+            anim.stop()
+        }
+    }
+
+}
+
+```
 
 * 2.3.2 设置适配器
 
+```kotlin
+PageLoadingView.setLoadingAdapter(MyContentLoadingAdapter(this))
+
+```
 
 
-#### 2.4 自定义拓展API说明
+### 三、特殊说明
 
 ```kotlin
 /**
