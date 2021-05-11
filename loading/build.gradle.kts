@@ -29,10 +29,12 @@ android {
             )
         }
     }
-    buildTypes.forEach {
-        it.buildConfigField("Integer", "versionCode", Publish.Version.versionCode.toString())
-        it.buildConfigField("String", "versionName", "\"${Publish.Version.versionName}\"")
-        it.buildConfigField("String", "versionTimeStamp", "\"$versionTimeStamp\"")
+    afterEvaluate {
+        buildTypes.forEach {
+            it.buildConfigField("Integer", "versionCode", Publish.Version.versionCode.toString())
+            it.buildConfigField("String", "versionName", "\"${Publish.Version.versionName}\"")
+            it.buildConfigField("String", "versionTimeStamp", "\"$versionTimeStamp\"")
+        }
     }
     sourceSets {
         getByName("main") {
