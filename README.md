@@ -157,7 +157,7 @@ interface PageLoadingAdapter {
     /**
      * @param failView
      * @param type 展示失败view时的类型
-     * @param extra 展示是被view时的额外参数
+     * @param extra 展示失败view时的额外参数
      * @param failViewEvent 事件响应
      */
     fun onShowFail(
