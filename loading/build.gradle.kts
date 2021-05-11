@@ -9,7 +9,7 @@ plugins {
 
 apply("common.gradle")
 
-val versionTimeStamp = Publish.Version.getVersionTimeStamp()
+val versionTimestamp = Publish.Version.getVersionTimestamp()
 
 android {
     buildTypes {
@@ -33,7 +33,7 @@ android {
         buildTypes.forEach {
             it.buildConfigField("Integer", "versionCode", Publish.Version.versionCode.toString())
             it.buildConfigField("String", "versionName", "\"${Publish.Version.versionName}\"")
-            it.buildConfigField("String", "versionTimeStamp", "\"$versionTimeStamp\"")
+            it.buildConfigField("String", "versionTimeStamp", "\"$versionTimestamp\"")
         }
     }
     sourceSets {
@@ -60,9 +60,9 @@ val sourceCodeTask: Jar = tasks.register("sourceCode", Jar::class.java) {
 
 
 tasks.register("createGitTagAndPush", Exec::class.java) {
-    commandLine("git", "push", "origin", versionTimeStamp)
+    commandLine("git", "push", "origin", versionTimestamp)
 }.get().dependsOn(tasks.register("createGitTag", Exec::class.java) {
-    commandLine("git", "tag", versionTimeStamp, "-m", "autoCreateWithMavenPublish")
+    commandLine("git", "tag", versionTimestamp, "-m", "autoCreateWithMavenPublish")
 })
 
 publishing {

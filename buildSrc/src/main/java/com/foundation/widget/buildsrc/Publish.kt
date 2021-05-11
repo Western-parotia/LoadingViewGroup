@@ -21,15 +21,15 @@ object Publish {
             }
         const val versionCode = 1
 
-        fun getTimeStamp(): String {
+        private fun getTimestamp(): String {
             return java.text.SimpleDateFormat(
                 "yyyy-MM-dd-hh-mm-ss",
                 java.util.Locale.CHINA
             ).format(java.util.Date(System.currentTimeMillis()))
         }
 
-        fun getVersionTimeStamp(): String {
-            return "$versionName-${getTimeStamp()}"
+        fun getVersionTimestamp(): String {
+            return "$versionName-${getTimestamp()}"
         }
     }
 
