@@ -18,6 +18,30 @@ implementation("com.foundation.widget:loading:版本号")
 ```
 #### 2.2 简单使用：
 
+单独使用
+
+```xml
+                <com.foundation.widget.loading.PageLoadingView
+                    android:layout_gravity="center"
+                    android:id="@+id/normalLoading"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+```
+
+作为根容器
+
+```xml
+        <com.foundation.widget.loading.LoadingConstraintLayout
+            android:id="@+id/contentLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            childView....
+            </com.foundation.widget.loading.LoadingConstraintLayout>
+```
+
+状态切换
+
 ```kotlin
             PageLoadingView.showLoading()
             PageLoadingView.showLoadingFail(false,0,"extra")
