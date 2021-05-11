@@ -57,6 +57,12 @@ val sourceCodeTask: Jar = tasks.register("sourceCode", Jar::class.java) {
 }.get()
 
 
+tasks.register("createGitTagAndPush", Exec::class.java) {
+    commandLine("git", "push", "origin", versionTimeStamp)
+}.get().dependsOn(tasks.register("createGitTag", Exec::class.java) {
+    commandLine("git", "tag", versionTimeStamp, "-m", "autoCreateWithMavenPublish")
+})
+
 publishing {
     val versionName = Publish.Version.versionName
     val groupId = Publish.Maven.groupId
@@ -69,14 +75,8 @@ publishing {
             version = versionName
             artifact(sourceCodeTask)
             afterEvaluate {//在脚本读取完成后绑定
-                val bundleReleaseAarTask: Task = tasks.getByName("bundleReleaseAar") {
-                    doLast {
-                        val rt = Runtime.getRuntime()
-                        rt.exec("git tag $versionTimeStamp -m autoMake")
-                        Thread.sleep(3000)
-                        rt.exec("git push origin $versionTimeStamp")
-                    }
-                }
+                val bundleReleaseAarTask: Task = tasks.getByName("bundleReleaseAar")
+                bundleReleaseAarTask.finalizedBy("createGitTagAndPush")
                 artifact(bundleReleaseAarTask)
             }
 //            artifact("$buildDir/outputs/aar/loading-release.aar")//直接制定文件
