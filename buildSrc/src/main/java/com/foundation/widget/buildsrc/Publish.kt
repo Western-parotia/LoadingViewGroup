@@ -1,5 +1,7 @@
 package com.foundation.widget.buildsrc
 
+import java.io.File
+
 
 /**
  *@Desc:
@@ -34,14 +36,26 @@ object Publish {
     }
 
     object Maven {
-        val codingArtifactsRepoUrl =
-            "https://mijukeji-maven.pkg.coding.net/repository/jileiku/base_maven/"
-        val codingArtifactsGradleUsername = "base_maven-1620455955399"
-        val codingArtifactsGradlePassword = "cf195a4e8b93afea3e5e0f6e538f62687c67cee7"
-
         val groupId = "com.foundation.widget"
         val artifactId = "loading"
 
-    }
+        var codingArtifactsRepoUrl: String? = null
+            private set
+        var codingArtifactsGradleUsername: String? = null
+            private set
+        var codingArtifactsGradlePassword: String? = null
+            private set
 
+        init {
+            val pFile = File("local.properties")
+            codingArtifactsRepoUrl = getProperties(pFile, "codingArtifactsRepoUrl")
+            codingArtifactsGradleUsername = getProperties(pFile, "codingArtifactsGradleUsername")
+            codingArtifactsGradlePassword = getProperties(pFile, "codingArtifactsGradlePassword")
+            "url=$codingArtifactsRepoUrl userName=$codingArtifactsGradleUsername pwd=$codingArtifactsGradlePassword".log(
+                "Publish config=========:"
+            )
+        }
+
+
+    }
 }
