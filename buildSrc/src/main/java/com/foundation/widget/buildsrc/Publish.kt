@@ -39,12 +39,9 @@ object Publish {
         val groupId = "com.foundation.widget"
         val artifactId = "loading"
 
-        var codingArtifactsRepoUrl: String? = null
-            private set
-        var codingArtifactsGradleUsername: String? = null
-            private set
-        var codingArtifactsGradlePassword: String? = null
-            private set
+        val codingArtifactsRepoUrl: String
+        val codingArtifactsGradleUsername: String
+        val codingArtifactsGradlePassword: String
 
         init {
             val pFile = File("local.properties")
