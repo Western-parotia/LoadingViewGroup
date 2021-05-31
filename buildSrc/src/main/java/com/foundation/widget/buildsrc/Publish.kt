@@ -39,15 +39,15 @@ object Publish {
         val groupId = "com.foundation.widget"
         val artifactId = "loading"
 
+        private val pFile = File("local.properties")
         val codingArtifactsRepoUrl: String
+            get() = getProperties(pFile, "codingArtifactsRepoUrl")
         val codingArtifactsGradleUsername: String
+            get() = getProperties(pFile, "codingArtifactsGradleUsername")
         val codingArtifactsGradlePassword: String
+            get() = getProperties(pFile, "codingArtifactsGradlePassword")
 
         init {
-            val pFile = File("local.properties")
-            codingArtifactsRepoUrl = getProperties(pFile, "codingArtifactsRepoUrl")
-            codingArtifactsGradleUsername = getProperties(pFile, "codingArtifactsGradleUsername")
-            codingArtifactsGradlePassword = getProperties(pFile, "codingArtifactsGradlePassword")
             "url=$codingArtifactsRepoUrl userName=$codingArtifactsGradleUsername pwd=$codingArtifactsGradlePassword".log(
                 "Publish config=========:"
             )

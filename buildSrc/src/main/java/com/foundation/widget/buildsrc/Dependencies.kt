@@ -8,10 +8,12 @@ package com.foundation.widget.buildsrc
  */
 object Dependencies {
     object Kotlin{
+        const val version = "1.4.32"
+
         /**
          * kotlin 语言核心库，像 let这种操作域拓展
          */
-        const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.4.32"
+        const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
     }
 
     object AndroidX {
