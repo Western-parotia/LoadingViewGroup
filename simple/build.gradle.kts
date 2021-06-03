@@ -75,10 +75,10 @@ dependencies {
 }
 repositories {
     maven {
-        setUrl(com.foundation.widget.buildsrc.Publish.Maven.codingArtifactsRepoUrl)
+        setUrl(com.foundation.widget.buildsrc.Publish.Maven.getCodingRepoUrl(project))
         credentials {
-            username = com.foundation.widget.buildsrc.Publish.Maven.codingArtifactsGradleUsername
-            password = com.foundation.widget.buildsrc.Publish.Maven.codingArtifactsGradlePassword
+            username = com.foundation.widget.buildsrc.Publish.Maven.getCodingMavenUsername(project)
+            password = com.foundation.widget.buildsrc.Publish.Maven.getCodingMavenPassword(project)
         }
     }
 }

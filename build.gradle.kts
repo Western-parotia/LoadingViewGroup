@@ -21,12 +21,12 @@ allprojects {
         jcenter()
         maven { setUrl("https://jitpack.io") }
         maven {
-            setUrl(com.foundation.widget.buildsrc.Publish.Maven.codingArtifactsRepoUrl)
+            setUrl(com.foundation.widget.buildsrc.Publish.Maven.getCodingRepoUrl(project))
             credentials {
                 username =
-                    com.foundation.widget.buildsrc.Publish.Maven.codingArtifactsGradleUsername
+                    com.foundation.widget.buildsrc.Publish.Maven.getCodingMavenUsername(project)
                 password =
-                    com.foundation.widget.buildsrc.Publish.Maven.codingArtifactsGradlePassword
+                    com.foundation.widget.buildsrc.Publish.Maven.getCodingMavenPassword(project)
             }
         }
     }
