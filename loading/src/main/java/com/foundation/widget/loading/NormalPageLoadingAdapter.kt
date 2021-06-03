@@ -9,13 +9,13 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import androidx.core.util.forEach
 
-/**
- *@Desc:
- *-大多数时候都需要统一管理动画的结束
- *create by zhusw on 5/7/21 14:57
- */
+
 private const val ANIM_DURATION_LONG = 800L
 
+/**
+ * 大多数时候都需要统一管理动画的结束
+ * create by zhusw on 5/7/21 14:57
+ */
 open class NormalLoadingAdapter(private val context: Context) : PageLoadingAdapter {
     private val animCache: SparseArray<ObjectAnimator> = SparseArray()
     override fun getBottomPlateView(): View? = null
