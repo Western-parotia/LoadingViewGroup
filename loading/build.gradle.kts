@@ -48,9 +48,7 @@ android {
 dependencies {
     implementation(Dependencies.Kotlin.kotlin_stdlib)
     implementation(Dependencies.AndroidX.core_ktx)
-    implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.AndroidX.constraintlayout)
-    implementation(Dependencies.Glide.glide)
 }
 
 val sourceCodeTask: Jar = tasks.register("sourceCode", Jar::class.java) {
