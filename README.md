@@ -7,6 +7,7 @@
 * 单独loading自由摆放、作为根容器
 
 ![](anim.gif)
+![](fail.png)
 
 APK 下载：[https://mijukeji.coding.net/p/jileiku/d/loadingViewGroup/git/tree/master/simple/simple-debug.apk](https://mijukeji.coding.net/p/jileiku/d/loadingViewGroup/git/tree/master/simple/simple-debug.apk)
 
