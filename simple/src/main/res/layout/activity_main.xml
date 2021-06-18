@@ -86,7 +86,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:background="#cdcdcd"
+                android:background="#000000"
                 android:scaleType="fitXY"
                 android:layout_height="match_parent" />
         </com.foundation.widget.loading.LoadingConstraintLayout>

@@ -23,13 +23,12 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
     private val DEFAULT_STREAMER_WIDTH = 30F.dp
     private val DEFAULT_ANGLE_SIZE = 30
     private val DEFAULT_COLOR = Color.parseColor("#F2F4F7")
-    private val DEFAULT_DURATION = 10000L
-    private val DEFAULT_SKIP_COUNT = 2
+    private val DEFAULT_DURATION = 5000L
+    private val DEFAULT_SKIP_COUNT = 1
 
     private val path = Path()
     private val xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
     var streamerWidth: Float
-    var streamerHeightOffset: Float
     var angleSize: Int
     var streamerColor: Int
     var animDuration: Long
@@ -76,11 +75,6 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
                 R.styleable.StreamerConstraintLayout_sc_width,
                 DEFAULT_STREAMER_WIDTH.toInt()
             ).toFloat()
-            streamerHeightOffset =
-                typeArray.getDimensionPixelOffset(
-                    R.styleable.StreamerConstraintLayout_sc_heightOffset,
-                    0
-                ).toFloat()
             angleSize = typeArray.getInt(
                 R.styleable.StreamerConstraintLayout_sc_angle,
                 DEFAULT_ANGLE_SIZE.toInt()
@@ -99,7 +93,6 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
             typeArray.recycle()
         } else {
             streamerWidth = DEFAULT_STREAMER_WIDTH
-            streamerHeightOffset = 0F
             angleSize = DEFAULT_ANGLE_SIZE
             streamerColor = DEFAULT_COLOR
             animDuration = DEFAULT_DURATION
@@ -109,28 +102,30 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
     private fun correctionPath() {
         path.reset()
         val startX = -streamerWidth
-        path.moveTo(startX, 0F)
+        val startY = height / 2F
+        path.moveTo(startX, startY)
         val cos = Math.cos(Math.toRadians(angleSize.toDouble()))
         val c = Math.abs(streamerWidth / cos)
         val num = c * c - (streamerWidth * streamerWidth)
         //y轴 长度
-        val b = Math.sqrt(num).toFloat() + streamerHeightOffset
-        path.lineTo(streamerWidth, b)
-        path.lineTo(streamerWidth, height.toFloat())
-        path.lineTo(startX, height - b)
+        val b = Math.sqrt(num).toFloat()
+        path.lineTo(startX + streamerWidth, startY + b)
+        path.lineTo(startX + streamerWidth, startY + height)
+        path.lineTo(startX, startY + (height - b))
         path.close()
     }
 
     override fun dispatchDraw(canvas: Canvas) {
         val count = canvas.saveLayer(0F, 0F, width.toFloat(), height.toFloat(), null)
         val translateX = progress * (width + streamerWidth)
+        val translateY = progress * height
         super.dispatchDraw(canvas)//内容
         paintStreamer.xfermode = xfermode
         paintStreamer.color = streamerColor
-        canvas.translate(translateX, 0F)
+        canvas.translate(translateX, -translateY)
         canvas.drawPath(path, paintStreamer)
         paintStreamer.xfermode = null
-        canvas.translate(-translateX, 0F)
+        canvas.translate(-translateX, translateY)
         canvas.restoreToCount(count)
     }
 

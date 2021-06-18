@@ -35,16 +35,17 @@ class MainActivity : AppCompatActivity() {
         tv.text = "正在加载..."
         tv.textSize = 10F.dp
         tv.typeface = Typeface.DEFAULT_BOLD
-        tv.setTextColor(Color.parseColor("#dbdbdb"))
+        tv.setTextColor(Color.parseColor("#334D4D"))
         val lp = ConstraintLayout.LayoutParams(
             ConstraintLayout.LayoutParams.WRAP_CONTENT,
             ConstraintLayout.LayoutParams.WRAP_CONTENT
         )
         streamerView.addView(tv, lp)
-        streamerView.streamerColor = Color.parseColor("#FF0000")
-        streamerView.animDuration = 1400L
-        streamerView.angleSize = 80
-        streamerView.streamerWidth = 10F.dp
+        streamerView.streamerColor = Color.parseColor("#E3E8E8")
+        streamerView.animDuration = 1200L
+        streamerView.angleSize = 45
+        streamerView.skipCount = 2
+        streamerView.streamerWidth = 23F.dp
         binding.streamerLoading.setLoadingAdapter(StreamerPageLoadingAdapter(streamerView))
 
         binding.btnStart.setOnClickListener {
