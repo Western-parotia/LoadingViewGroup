@@ -23,7 +23,7 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
     private val DEFAULT_STREAMER_WIDTH = 30F.dp
     private val DEFAULT_ANGLE_SIZE = 30
     private val DEFAULT_COLOR = Color.parseColor("#F2F4F7")
-    private val DEFAULT_DURATION = 2000L
+    private val DEFAULT_DURATION = 10000L
     private val DEFAULT_SKIP_COUNT = 2
 
     private val path = Path()
@@ -106,14 +106,31 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
         }
     }
 
+    private fun correctionPath() {
+        path.reset()
+        val startX = -streamerWidth
+        path.moveTo(startX, 0F)
+        val cos = Math.cos(Math.toRadians(angleSize.toDouble()))
+        val c = Math.abs(streamerWidth / cos)
+        val num = c * c - (streamerWidth * streamerWidth)
+        //y轴 长度
+        val b = Math.sqrt(num).toFloat() + streamerHeightOffset
+        path.lineTo(streamerWidth, b)
+        path.lineTo(streamerWidth, height.toFloat())
+        path.lineTo(startX, height - b)
+        path.close()
+    }
+
     override fun dispatchDraw(canvas: Canvas) {
         val count = canvas.saveLayer(0F, 0F, width.toFloat(), height.toFloat(), null)
+        val translateX = progress * (width + streamerWidth)
         super.dispatchDraw(canvas)//内容
-        refreshPath()
         paintStreamer.xfermode = xfermode
         paintStreamer.color = streamerColor
+        canvas.translate(translateX, 0F)
         canvas.drawPath(path, paintStreamer)
         paintStreamer.xfermode = null
+        canvas.translate(-translateX, 0F)
         canvas.restoreToCount(count)
     }
 
@@ -122,24 +139,8 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
         floatAnim.cancel()
     }
 
-
-    private fun refreshPath() {
-        path.reset()
-        if (progress == 0F) return
-        val startX = progress * width
-        path.moveTo(startX, 0F)
-        val cos = Math.cos(Math.toRadians(angleSize.toDouble()))
-        val c = Math.abs(streamerWidth / cos)
-        val num = c * c - (streamerWidth * streamerWidth)
-        //y轴 长度
-        val b = Math.sqrt(num).toFloat() + streamerHeightOffset
-        path.lineTo(startX + streamerWidth, b)
-        path.lineTo(startX + streamerWidth, height.toFloat())
-        path.lineTo(startX, height - b)
-        path.close()
-    }
-
     fun start() {
+        correctionPath()
         floatAnim.duration = animDuration
         floatAnim.start()
     }
