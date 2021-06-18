@@ -6,6 +6,8 @@
 * view级别动画拓展与事件处理
 * 单独loading自由摆放、作为根容器
 
+![](anim.gif)
+
 APK 下载：[https://mijukeji.coding.net/p/jileiku/d/loadingViewGroup/git/tree/master/simple/simple-debug.apk](https://mijukeji.coding.net/p/jileiku/d/loadingViewGroup/git/tree/master/simple/simple-debug.apk)
 
 ### 二、使用：
