@@ -56,7 +56,8 @@ class MainActivity : AppCompatActivity() {
 /**
  * 自定义loading逻辑
  */
-class MyContentLoadingAdapter(private val context: Context) : PageLoadingAdapter {
+class MyContentLoadingAdapter(private val context: Context) :
+    PageLoadingAdapter<AppCompatImageView, View> {
 
     /**
      * 设置骨架图
@@ -76,16 +77,14 @@ class MyContentLoadingAdapter(private val context: Context) : PageLoadingAdapter
         background = ContextCompat.getDrawable(context, R.drawable.dw_loading)
     }
 
-    override fun getLoadingView(): View? = loadingView
+    override fun getLoadingView(): AppCompatImageView? = loadingView
 
     /**
      * 展示动画
      */
-    override fun onShowLoading(loadingView: View) {
-        if (loadingView.background is Animatable) {
-            val anim = loadingView.background as Animatable
-            anim.start()
-        }
+    override fun onShowLoading(loadingView: AppCompatImageView?) {
+        val anim = loadingView?.background as? Animatable
+        anim?.start()
     }
 
     /**
@@ -116,11 +115,9 @@ class MyContentLoadingAdapter(private val context: Context) : PageLoadingAdapter
     /**
      * 停止动画
      */
-    override fun onStop(loadingView: View?, failView: View?) {
-        if (loadingView?.background is Animatable) {
-            val anim = loadingView.background as Animatable
-            anim.stop()
-        }
+    override fun onStop(loadingView: AppCompatImageView?, failView: View?) {
+        val anim = loadingView?.background as? Animatable
+        anim?.stop()
     }
 
 }
