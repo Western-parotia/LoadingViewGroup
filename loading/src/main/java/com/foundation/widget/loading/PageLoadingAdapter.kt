@@ -15,7 +15,7 @@ interface PageLoadingAdapter {
     fun getLoadingView(): View?
     fun getLoadingFailView(): View?
 
-    fun onShowLoading(loadingView: View)
+    fun onShowLoading(loadingView: View?)
 
     /**
      * @param failView

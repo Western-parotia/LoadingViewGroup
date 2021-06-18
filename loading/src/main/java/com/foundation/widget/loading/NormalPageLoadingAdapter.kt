@@ -2,7 +2,6 @@ package com.foundation.widget.loading
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.content.Context
 import android.util.SparseArray
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -16,7 +15,7 @@ private const val ANIM_DURATION_LONG = 800L
  * 大多数时候都需要统一管理动画的结束
  * create by zhusw on 5/7/21 14:57
  */
-open class NormalLoadingAdapter(private val context: Context) : PageLoadingAdapter {
+open class NormalLoadingAdapter : PageLoadingAdapter {
     private val animCache: SparseArray<ObjectAnimator> = SparseArray()
     override fun getBottomPlateView(): View? = null
     override fun getLoadingView(): View? = null
@@ -25,7 +24,7 @@ open class NormalLoadingAdapter(private val context: Context) : PageLoadingAdapt
     /**
      * 属性动画 默认是弱引用的，不必考虑释放问题
      */
-    override fun onShowLoading(loadingView: View) {
+    override fun onShowLoading(loadingView: View?) {
         //今内部借用stop 处理，每次loading 都作为新都开始
         onStop(loadingView, null)
         ObjectAnimator.ofFloat(loadingView, "rotationX", 0F, 200F).apply {

@@ -1,6 +1,7 @@
 package com.foundation.widget.simple
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import com.foundation.widget.loading.PageLoadingAdapter
+import com.foundation.widget.loading.StreamerPageLoadingAdapter
 import com.foundation.widget.simple.databinding.ActivityMainBinding
+
+internal val Float.dp get() = this * Resources.getSystem().displayMetrics.density + 0.5F
+internal val Int.dp get() = this.toFloat().dp.toInt()
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,35 +24,49 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.contentLoading.setLoadingAdapter(MyContentLoadingAdapter(this))
+
+        binding.streamerLoading.setLoadingAdapter(StreamerPageLoadingAdapter(this).apply {
+            angleSize = 50
+            animDuration = 1600
+        })
+
+        binding.btnStart.setOnClickListener {
+            binding.normalLoading.showLoading(false)
+            binding.contentLoading.showLoading(true)
+            binding.streamerLoading.showLoading(false)
+        }
+        binding.btnStop.setOnClickListener {
+            binding.normalLoading.stop()
+            binding.contentLoading.stop()
+            binding.streamerLoading.stop()
+        }
+        binding.btnShowFail.setOnClickListener {
+            binding.normalLoading.showLoadingFail()
+            binding.contentLoading.showLoadingFail(false, 0, "额外参数")
+            binding.streamerLoading.showLoadingFail()
+        }
+
+        binding.btnShow.setOnClickListener {
+            binding.normalLoading.checkLoadingState()
+            binding.contentLoading.checkLoadingState()
+            binding.streamerLoading.checkLoadingState()
+
+        }
+        binding.normalLoading.failViewEventListener = { _: View, _: Int, _: Any? ->
+            Toast.makeText(this, "normalLoading fail click", Toast.LENGTH_LONG).show()
+            binding.normalLoading.showLoading(false)
+        }
+        binding.streamerLoading.failViewEventListener = { _: View, _: Int, _: Any? ->
+            Toast.makeText(this, "streamerLoading fail click", Toast.LENGTH_LONG).show()
+            binding.streamerLoading.showLoading(false)
+        }
         binding.contentLoading.failViewEventListener = { _: View, type: Int, extra: Any? ->
             Toast.makeText(
                 this,
                 "contentLoading fail clikc type:$type extra:$extra",
                 Toast.LENGTH_LONG
             ).show()
-            binding.normalLoading.showLoading(false)
             binding.contentLoading.showLoading(true)
-        }
-
-        binding.btnStart.setOnClickListener {
-            binding.normalLoading.showLoading(false)
-            binding.contentLoading.showLoading(true)
-        }
-        binding.btnStop.setOnClickListener {
-            binding.normalLoading.stop()
-            binding.contentLoading.stop()
-        }
-        binding.btnShowFail.setOnClickListener {
-            binding.normalLoading.showLoadingFail()
-            binding.contentLoading.showLoadingFail(false, 0, "额外参数")
-        }
-
-        binding.normalLoading.failViewEventListener = { _: View, _: Int, _: Any? ->
-            Toast.makeText(this, "lv fail click", Toast.LENGTH_LONG).show()
-        }
-        binding.btnShow.setOnClickListener {
-            binding.normalLoading.checkLoadingState()
-            binding.contentLoading.checkLoadingState()
         }
     }
 
@@ -57,7 +76,7 @@ class MainActivity : AppCompatActivity() {
  * 自定义loading逻辑
  */
 class MyContentLoadingAdapter(private val context: Context) :
-    PageLoadingAdapter<AppCompatImageView, View> {
+    PageLoadingAdapter {
 
     /**
      * 设置骨架图
@@ -65,7 +84,7 @@ class MyContentLoadingAdapter(private val context: Context) :
     override fun getBottomPlateView(): View = AppCompatImageView(context).apply {
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
+            350.dp
         )
         background = ContextCompat.getDrawable(context, R.drawable.img_skeleton_screen)
     }
@@ -82,7 +101,7 @@ class MyContentLoadingAdapter(private val context: Context) :
     /**
      * 展示动画
      */
-    override fun onShowLoading(loadingView: AppCompatImageView?) {
+    override fun onShowLoading(loadingView: View?) {
         val anim = loadingView?.background as? Animatable
         anim?.start()
     }
@@ -115,7 +134,7 @@ class MyContentLoadingAdapter(private val context: Context) :
     /**
      * 停止动画
      */
-    override fun onStop(loadingView: AppCompatImageView?, failView: View?) {
+    override fun onStop(loadingView: View?, failView: View?) {
         val anim = loadingView?.background as? Animatable
         anim?.stop()
     }

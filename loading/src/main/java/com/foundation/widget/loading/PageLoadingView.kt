@@ -19,7 +19,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     ViewGroup(context, attributeSet), IPageLoading {
     constructor(context: Context) : this(context, null)
 
-    private var adapter: PageLoadingAdapter = NormalLoadingAdapter(context)
+    private var adapter: PageLoadingAdapter = NormalLoadingAdapter()
 
     private var bottomPlateView: View = View(context).apply {
         layoutParams = LayoutParams(1.dp, 1.dp)
@@ -116,6 +116,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun showLoadingFail(showBottomPlate: Boolean, type: Int, extra: Any?) {
+        adapter.onStop(loadingView, failView)
         loadingView.animation?.cancel()
         loadingView.animate()
             .alpha(0F)

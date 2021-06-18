@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:layout_height="200dp">
+            android:layout_height="150dp">
 
             <FrameLayout
                 android:layout_width="0dp"
@@ -30,8 +30,7 @@
                 <com.foundation.widget.loading.PageLoadingView
                     android:layout_gravity="center"
                     android:id="@+id/normalLoading"
-                    android:background="#AFFFFFFF"
-                    android:visibility="gone"
+                    android:background="#000"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </FrameLayout>
@@ -40,8 +39,9 @@
 
         <com.foundation.widget.loading.LoadingConstraintLayout
             android:id="@+id/contentLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="350dp">
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_avatar"
                 app:shapeAppearanceOverlay="@style/circleStyle"
@@ -74,12 +74,23 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv"
                 android:layout_width="match_parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_height="300dp"
+                android:layout_height="150dp"
                 android:background="@drawable/girl" />
 
         </com.foundation.widget.loading.LoadingConstraintLayout>
-    </LinearLayout>
 
+        <com.foundation.widget.loading.LoadingConstraintLayout
+            android:id="@+id/streamerLoading"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:background="#cdcdcd"
+                android:scaleType="fitXY"
+                android:layout_height="match_parent" />
+        </com.foundation.widget.loading.LoadingConstraintLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
