@@ -136,11 +136,11 @@ PageLoadingView.setLoadingAdapter(MyContentLoadingAdapter(this))
 ```
 
 
-### 三、特殊说明
+### 三、特殊说明 完整适配器接口：PageLoadingAdapter
 
 ```kotlin
+
 /**
- *@Desc:
  * loading 适配器
  * 除了提供属性拓展，也提供了生命周期回调，用于状态初始化与资源释放
  * loadingView,failView,bottomPlateView,内置的 LayoutParams 都是wrap_content的
@@ -152,13 +152,14 @@ interface PageLoadingAdapter {
     fun getBottomPlateView(): View?
     fun getLoadingView(): View?
     fun getLoadingFailView(): View?
+    fun getEmptyView(): View?
 
     fun onShowLoading(loadingView: View)
 
     /**
      * @param failView
      * @param type 展示失败view时的类型
-     * @param extra 展示失败view时的额外参数
+     * @param extra  展示失败view时的额外参数
      * @param failViewEvent 事件响应
      */
     fun onShowFail(
@@ -168,11 +169,14 @@ interface PageLoadingAdapter {
         failViewEvent: (view: View, type: Int, extra: Any?) -> Unit
     )
 
+    fun onShowEmptyView(emptyView: View)
+
     /**
      * 为什么是可空类型：loading 与 fail 是完全隔离的状态，不会同时出现
      * 但他们却存在交替出现的可能，可以交替出现多次，但最终只需要停止一次
      */
     fun onStop(loadingView: View?, failView: View?)
+
 
 }
 ```

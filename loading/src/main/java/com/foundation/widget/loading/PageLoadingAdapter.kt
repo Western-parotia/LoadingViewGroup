@@ -2,7 +2,6 @@ package com.foundation.widget.loading
 import android.view.View
 
 /**
- *@Desc:
  * loading 适配器
  * 除了提供属性拓展，也提供了生命周期回调，用于状态初始化与资源释放
  * loadingView,failView,bottomPlateView,内置的 LayoutParams 都是wrap_content的
