@@ -70,6 +70,11 @@ class MainActivity : AppCompatActivity() {
             binding.streamerLoading.checkLoadingState()
 
         }
+        binding.btnEmpty.setOnClickListener {
+            binding.normalLoading.showEmptyView()
+            binding.contentLoading.showEmptyView()
+            binding.streamerLoading.showEmptyView()
+        }
         binding.normalLoading.failViewEventListener = { _: View, _: Int, _: Any? ->
             Toast.makeText(this, "normalLoading fail click", Toast.LENGTH_LONG).show()
             binding.normalLoading.showLoading(false)
@@ -119,8 +124,8 @@ class MyContentLoadingAdapter(private val context: Context) :
     /**
      * 展示动画
      */
-    override fun onShowLoading(loadingView: View?) {
-        val anim = loadingView?.background as? Animatable
+    override fun onShowLoading(loadingView: View) {
+        val anim = loadingView.background as? Animatable
         anim?.start()
     }
 
@@ -135,6 +140,9 @@ class MyContentLoadingAdapter(private val context: Context) :
             )
         }
 
+    override fun getEmptyView(): View? = null
+
+
     /**
      * 设置失败响应事件
      */
@@ -147,6 +155,9 @@ class MyContentLoadingAdapter(private val context: Context) :
         failView.findViewById<View>(R.id.btn).setOnClickListener {
             failViewEvent.invoke(failView, type, extra)
         }
+    }
+
+    override fun onShowEmptyView(emptyView: View) {
     }
 
     /**

@@ -14,8 +14,9 @@ interface PageLoadingAdapter {
     fun getBottomPlateView(): View?
     fun getLoadingView(): View?
     fun getLoadingFailView(): View?
+    fun getEmptyView(): View?
 
-    fun onShowLoading(loadingView: View?)
+    fun onShowLoading(loadingView: View)
 
     /**
      * @param failView
@@ -30,10 +31,13 @@ interface PageLoadingAdapter {
         failViewEvent: (view: View, type: Int, extra: Any?) -> Unit
     )
 
+    fun onShowEmptyView(emptyView: View)
+
     /**
      * 为什么是可空类型：loading 与 fail 是完全隔离的状态，不会同时出现
      * 但他们却存在交替出现的可能，可以交替出现多次，但最终只需要停止一次
      */
     fun onStop(loadingView: View?, failView: View?)
+
 
 }

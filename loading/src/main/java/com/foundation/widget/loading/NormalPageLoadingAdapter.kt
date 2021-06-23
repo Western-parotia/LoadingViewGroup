@@ -20,11 +20,12 @@ open class NormalLoadingAdapter : PageLoadingAdapter {
     override fun getBottomPlateView(): View? = null
     override fun getLoadingView(): View? = null
     override fun getLoadingFailView(): View? = null
+    override fun getEmptyView(): View? = null
 
     /**
      * 属性动画 默认是弱引用的，不必考虑释放问题
      */
-    override fun onShowLoading(loadingView: View?) {
+    override fun onShowLoading(loadingView: View) {
         //今内部借用stop 处理，每次loading 都作为新都开始
         onStop(loadingView, null)
         ObjectAnimator.ofFloat(loadingView, "rotationX", 0F, 200F).apply {
@@ -53,6 +54,10 @@ open class NormalLoadingAdapter : PageLoadingAdapter {
         failView.setOnClickListener {
             failViewEvent.invoke(failView, type, extra)
         }
+    }
+
+    override fun onShowEmptyView(emptyView: View) {
+
     }
 
     override fun onStop(loadingView: View?, failView: View?) {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 
 /**
  *@Desc:
@@ -23,6 +24,11 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
 
     private var bottomPlateView: View = View(context).apply {
         layoutParams = LayoutParams(1.dp, 1.dp)
+        addView(this)
+    }
+    private var emptyView: View = TextView(context).apply {
+        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+        text = "无数据"
         addView(this)
     }
     private var loadingView: View = ImageView(context).apply {
@@ -49,12 +55,14 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         bottomPlateView.autoMeasure(this)
         loadingView.autoMeasure(this)
         failView.autoMeasure(this)
+        emptyView.autoMeasure(this)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         bottomPlateView.autoLayoutToCenter(this)
         loadingView.autoLayoutToCenter(this)
         failView.autoLayoutToCenter(this)
+        emptyView.autoLayoutToCenter(this)
     }
 
     override fun onDetachedFromWindow() {
@@ -88,7 +96,33 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 }
                 addView(failView)
             }
+            getEmptyView()?.let {
+                removeView(emptyView)
+                emptyView = it.apply {
+                    visibility = View.GONE
+                    elevation = loadingView.elevation - 0.2F
+                }
+                addView(emptyView)
+            }
+
         }
+    }
+
+    override fun showEmptyView() {
+        loadingView.animation?.cancel()
+        loadingView.animate()
+            .alpha(0F)
+            .setDuration(ANIM_DURATION)
+            .withEndAction {
+                alpha = 1F
+                visibility = View.VISIBLE
+                bottomPlateView.visibility = View.GONE
+                loadingView.visibility = View.GONE
+                failView.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
+                adapter.onShowEmptyView(emptyView)
+            }
+            .start()
     }
 
     /**
@@ -101,6 +135,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         alpha = 0F
         visibility = View.VISIBLE
         failView.visibility = View.GONE
+        emptyView.visibility = View.GONE
         bottomPlateView.visibility = if (showBottomPlate) View.VISIBLE else View.GONE
         loadingView.run {
             visibility = View.VISIBLE
@@ -126,6 +161,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 visibility = View.VISIBLE
                 bottomPlateView.visibility = if (showBottomPlate) View.VISIBLE else View.GONE
                 loadingView.visibility = View.GONE
+                emptyView.visibility = View.GONE
                 failView.visibility = View.VISIBLE
                 adapter.onShowFail(failView, type, extra, failViewEventListener)
             }

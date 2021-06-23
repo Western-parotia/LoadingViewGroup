@@ -60,6 +60,10 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
         loadingView.showLoadingFail(showBottomPlate, type, extra)
     }
 
+    override fun showEmptyView() {
+        loadingView.showEmptyView()
+    }
+
     override fun stop() {
         loadingView.stop()
     }

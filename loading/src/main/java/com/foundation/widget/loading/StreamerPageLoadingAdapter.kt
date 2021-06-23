@@ -12,11 +12,12 @@ open class StreamerPageLoadingAdapter(val streamerView: StreamerConstraintLayout
     override fun getBottomPlateView(): View? = null
     override fun getLoadingView(): StreamerConstraintLayout? = streamerView
     override fun getLoadingFailView(): View? = null
+    override fun getEmptyView(): View? = null
 
     /**
      * 属性动画 默认是弱引用的，不必考虑释放问题
      */
-    override fun onShowLoading(loadingView: View?) {
+    override fun onShowLoading(loadingView: View) {
         streamerView.start()
     }
 
@@ -29,6 +30,9 @@ open class StreamerPageLoadingAdapter(val streamerView: StreamerConstraintLayout
         failView.setOnClickListener {
             failViewEvent.invoke(failView, type, extra)
         }
+    }
+
+    override fun onShowEmptyView(emptyView: View) {
     }
 
     override fun onStop(loadingView: View?, failView: View?) {

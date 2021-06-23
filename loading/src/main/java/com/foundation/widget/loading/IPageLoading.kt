@@ -19,6 +19,8 @@ interface IPageLoading {
      * 便于处理不同失败状态的响应事件
      */
     fun showLoadingFail(showBottomPlate: Boolean = true, type: Int = 0, extra: Any? = null)
+
+    fun showEmptyView()
     fun stop()
     fun asLoading(): IPageLoading
 }
