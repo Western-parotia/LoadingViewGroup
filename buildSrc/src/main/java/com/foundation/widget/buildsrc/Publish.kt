@@ -40,7 +40,7 @@ object Publish {
         private const val fileName = "local.properties"
 
         val groupId = "com.foundation.widget"
-        val artifactId = "loading-constraintlayout"
+        val artifactId = "loadingview"
 
         fun getCodingRepoUrl(project: Project): String {
             val pFile = File("${project.rootDir}/$fileName")
