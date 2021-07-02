@@ -1,7 +1,6 @@
 package com.foundation.widget.loading
 
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +24,6 @@ internal val Float.dp get() = this * Resources.getSystem().displayMetrics.densit
 internal val Int.dp get() = this.toFloat().dp.toInt()
 internal val DRAWABLE_WHITE = GradientDrawable().apply {
     setColor(GlobalLoadingConfig.onInitForegroundColor)
-}
-internal val DRAWABLE_TRANSPARENT = GradientDrawable().apply {
-    setColor(Color.parseColor("#00000000"))
 }
 
 internal fun Int.toExactlyMeasureSpec(): Int {
