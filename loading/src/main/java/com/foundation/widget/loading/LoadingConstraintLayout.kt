@@ -34,7 +34,6 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
             val clp = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             _loadingView = PageLoadingView(context)
             _loadingView!!.let {
-                it.visibility = View.GONE
                 it.elevation = 2F.dp
                 addView(it, clp)
             }
