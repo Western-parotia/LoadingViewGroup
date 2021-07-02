@@ -1,7 +1,6 @@
 package com.foundation.widget.loading
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -23,12 +22,6 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
 
     private var adapter: PageLoadingAdapter = NormalLoadingAdapter()
 
-    init {
-        if (background == null) {
-            background = DRAWABLE_WHITE
-        }
-    }
-
     private var loadingView: View = adapter.getLoadingView() ?: let {
         ImageView(context).apply {
             visibility = View.VISIBLE
@@ -39,7 +32,9 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
     private var bottomPlateView: View = adapter.getBottomPlateView() ?: let {
         View(context).apply {
-            layoutParams = LayoutParams(1.dp, 1.dp)
+            layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            background = DRAWABLE_WHITE
+            elevation = loadingView.elevation - 0.1F
             visibility = View.VISIBLE
             addView(this)
         }
@@ -49,6 +44,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             text = "无数据"
             visibility = View.INVISIBLE
+            elevation = loadingView.elevation - 0.2F
             addView(this)
         }
     }
@@ -68,11 +64,6 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
         adapter = loadingAdapter
         resetLayout()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-            && background != null
-        ) {
-            background = null
-        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

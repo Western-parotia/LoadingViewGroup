@@ -18,7 +18,7 @@ internal fun String.log(secTAG: String = "") {
     }
 }
 
-internal const val MATCH_PART = ViewGroup.LayoutParams.MATCH_PARENT
+internal const val MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT
 internal const val WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT
 internal val Float.dp get() = this * Resources.getSystem().displayMetrics.density + 0.5F
 internal val Int.dp get() = this.toFloat().dp.toInt()
@@ -36,7 +36,7 @@ internal fun Int.toAtMostMeasureSpec(): Int {
 
 internal fun View.defaultWidthMeasureSpec(parentView: ViewGroup): Int {
     return when (layoutParams.width) {
-        MATCH_PART -> parentView.measuredWidth.toExactlyMeasureSpec()
+        MATCH_PARENT -> parentView.measuredWidth.toExactlyMeasureSpec()
         WRAP_CONTENT -> WRAP_CONTENT.toAtMostMeasureSpec()
         0 -> throw IllegalAccessException("need special treatment for $parentView width")
         else -> {
@@ -46,7 +46,7 @@ internal fun View.defaultWidthMeasureSpec(parentView: ViewGroup): Int {
 }
 internal fun View.defaultHeightMeasureSpec(parentView: ViewGroup):Int{
     return when (layoutParams.height) {
-        MATCH_PART -> parentView.measuredHeight.toExactlyMeasureSpec()
+        MATCH_PARENT -> parentView.measuredHeight.toExactlyMeasureSpec()
         WRAP_CONTENT -> WRAP_CONTENT.toAtMostMeasureSpec()
         0 -> throw IllegalAccessException("need special treatment for $parentView height")
         else -> {

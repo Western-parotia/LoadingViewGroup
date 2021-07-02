@@ -10,7 +10,7 @@ import com.foundation.widget.loading.GlobalLoadingConfig
 class CustomApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        GlobalLoadingConfig.onInitForegroundColor = Color.BLUE
+        GlobalLoadingConfig.onInitForegroundColor = Color.YELLOW
 
     }
 }

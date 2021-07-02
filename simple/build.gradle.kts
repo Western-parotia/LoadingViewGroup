@@ -67,7 +67,7 @@ dependencies {
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.Material.material)
     implementation(Dependencies.AndroidX.constraintlayout)
-//    implementation("com.foundation.widget:loading:1.1")
+//    implementation("com.foundation.widget:loading:1.0.2-SNAPSHOT")
     implementation(project(":loading"))
 //    implementation(Dependencies.Glide.glide)
 //    implementation(Dependencies.Glide.compiler)
