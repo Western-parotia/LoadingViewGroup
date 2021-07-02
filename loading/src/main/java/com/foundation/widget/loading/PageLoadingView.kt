@@ -1,6 +1,7 @@
 package com.foundation.widget.loading
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -22,25 +23,42 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
 
     private var adapter: PageLoadingAdapter = NormalLoadingAdapter()
 
-    private var bottomPlateView: View = View(context).apply {
-        layoutParams = LayoutParams(1.dp, 1.dp)
-        addView(this)
+    init {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (foreground == null) {
+                foreground = DRAWABLE_WHITE
+            }
+        }
     }
-    private var emptyView: View = TextView(context).apply {
-        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-        text = "无数据"
-        addView(this)
+
+    private var bottomPlateView: View = adapter.getBottomPlateView() ?: let {
+        View(context).apply {
+            layoutParams = LayoutParams(1.dp, 1.dp)
+            addView(this)
+        }
     }
-    private var loadingView: View = ImageView(context).apply {
-        layoutParams = LayoutParams(34.dp, 34.dp)
-        setBackgroundResource(R.drawable.loading_ic_baseline_hourglass_top_48)
-        addView(this)
+    private var emptyView: View = adapter.getEmptyView() ?: let {
+        TextView(context).apply {
+            layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            text = "无数据"
+            addView(this)
+        }
     }
-    private var failView: View = Button(context).apply {
-        text = "点击重试"
-        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-        addView(this)
-        visibility = View.GONE
+
+    private var loadingView: View = adapter.getLoadingView() ?: let {
+        ImageView(context).apply {
+            layoutParams = LayoutParams(34.dp, 34.dp)
+            setBackgroundResource(R.drawable.loading_ic_baseline_hourglass_top_48)
+            addView(this)
+        }
+    }
+    private var failView: View = adapter.getLoadingFailView() ?: let {
+        Button(context).apply {
+            text = "点击重试"
+            layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            addView(this)
+            visibility = View.GONE
+        }
     }
     override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit =
         { _: View, _: Int, _: Any? -> }
@@ -75,6 +93,14 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         super.onDetachedFromWindow()
     }
 
+    private fun clearForegroundDrawable() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+            && foreground != null
+        ) {
+            foreground = null
+        }
+    }
+
     private fun resetLayout() {
         adapter.run {
             getLoadingView()?.let {
@@ -106,6 +132,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             }
 
         }
+        clearForegroundDrawable()
     }
 
     override fun showEmptyView() {
@@ -123,6 +150,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 adapter.onShowEmptyView(emptyView)
             }
             .start()
+        clearForegroundDrawable()
     }
 
     /**
@@ -148,6 +176,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 adapter.onShowLoading(loadingView)
             }
             .start()
+        clearForegroundDrawable()
     }
 
     override fun showLoadingFail(showBottomPlate: Boolean, type: Int, extra: Any?) {
@@ -166,6 +195,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 adapter.onShowFail(failView, type, extra, failViewEventListener)
             }
             .start()
+        clearForegroundDrawable()
     }
 
     /**
@@ -180,6 +210,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 adapter.onStop(loadingView, failView)
             }
             .start()
+        clearForegroundDrawable()
     }
 
     override fun asLoading(): IPageLoading = this
@@ -190,6 +221,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      * 这是一个后门方法，通常不应该使用
      */
     fun checkLoadingState() {
+        clearForegroundDrawable()
         alpha = 1F
         visibility = View.VISIBLE
     }

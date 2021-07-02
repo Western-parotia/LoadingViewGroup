@@ -25,6 +25,7 @@ internal val Int.dp get() = this.toFloat().dp.toInt()
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -91,6 +92,11 @@ class MainActivity : AppCompatActivity() {
             ).show()
             binding.contentLoading.showLoading(true)
         }
+        binding.normalLoading.postDelayed({
+            binding.normalLoading.showLoading(true)
+            binding.contentLoading.showLoading(true)
+            binding.streamerLoading.showLoading(false)
+        }, 3000)
     }
 
 }

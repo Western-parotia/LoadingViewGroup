@@ -1,6 +1,8 @@
 package com.foundation.widget.loading
 
 import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.view.ViewGroup
 
@@ -19,16 +21,24 @@ internal fun String.log(secTAG: String = "") {
 
 internal const val MATCH_PART = ViewGroup.LayoutParams.MATCH_PARENT
 internal const val WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT
-internal val Float.dp get() = this * Resources.getSystem().displayMetrics.density+0.5F
+internal val Float.dp get() = this * Resources.getSystem().displayMetrics.density + 0.5F
 internal val Int.dp get() = this.toFloat().dp.toInt()
-internal fun Int.toExactlyMeasureSpec():Int{
+internal val DRAWABLE_WHITE = GradientDrawable().apply {
+    setColor(GlobalLoadingConfig.onInitForegroundColor)
+}
+internal val DRAWABLE_TRANSPARENT = GradientDrawable().apply {
+    setColor(Color.parseColor("#00000000"))
+}
+
+internal fun Int.toExactlyMeasureSpec(): Int {
     return View.MeasureSpec.makeMeasureSpec(this, View.MeasureSpec.EXACTLY)
 }
-internal fun Int.toAtMostMeasureSpec():Int{
+
+internal fun Int.toAtMostMeasureSpec(): Int {
     return View.MeasureSpec.makeMeasureSpec(this, View.MeasureSpec.AT_MOST)
 }
 
-internal fun View.defaultWidthMeasureSpec(parentView: ViewGroup):Int{
+internal fun View.defaultWidthMeasureSpec(parentView: ViewGroup): Int {
     return when (layoutParams.width) {
         MATCH_PART -> parentView.measuredWidth.toExactlyMeasureSpec()
         WRAP_CONTENT -> WRAP_CONTENT.toAtMostMeasureSpec()

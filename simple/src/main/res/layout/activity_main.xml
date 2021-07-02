@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,7 +31,6 @@
                 <com.foundation.widget.loading.PageLoadingView
                     android:layout_gravity="center"
                     android:id="@+id/normalLoading"
-                    android:background="#000"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </FrameLayout>
@@ -86,9 +86,11 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:background="#000000"
+                android:layout_height="match_parent"
+                android:background="#a0a0c0"
                 android:scaleType="fitXY"
-                android:layout_height="match_parent" />
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
         </com.foundation.widget.loading.LoadingConstraintLayout>
     </LinearLayout>
 
