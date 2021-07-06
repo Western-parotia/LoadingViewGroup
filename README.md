@@ -15,7 +15,7 @@
 #### 2.1 依赖：
 
 ``` kotlin
-implementation("com.foundation.widget:loading:版本号")
+implementation("com.foundation.widget:loadingview:版本号")
 ```
 #### 2.2 简单使用：
 
