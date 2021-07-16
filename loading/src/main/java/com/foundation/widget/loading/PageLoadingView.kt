@@ -131,8 +131,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             .setDuration(ANIM_DURATION)
             .withEndAction {
                 alpha = 1F
-                visibility = View.VISIBLE
-                bottomPlateView.visibility = View.GONE
+                this@PageLoadingView.visibility = View.VISIBLE
                 loadingView.visibility = View.GONE
                 failView.visibility = View.GONE
                 emptyView.visibility = View.VISIBLE
