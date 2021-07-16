@@ -20,6 +20,18 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     ViewGroup(context, attributeSet), IPageLoading {
     constructor(context: Context) : this(context, null)
 
+    private var closeEffect = false
+
+    init {
+        if (isInEditMode) {
+            if (null != attributeSet) {
+                val typeArray =
+                    context.obtainStyledAttributes(attributeSet, R.styleable.LoadingVIew)
+                closeEffect = typeArray.getBoolean(R.styleable.LoadingVIew_closeEffect, false)
+            }
+        }
+    }
+
     private var adapter: PageLoadingAdapter = NormalLoadingAdapter()
 
     private var loadingView: View = adapter.getLoadingView() ?: let {
@@ -68,6 +80,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        if (closeEffect) return
         bottomPlateView.autoMeasure(this)
         loadingView.autoMeasure(this)
         failView.autoMeasure(this)
@@ -75,6 +88,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        if (closeEffect) return
         bottomPlateView.autoLayoutToCenter(this)
         loadingView.autoLayoutToCenter(this)
         failView.autoLayoutToCenter(this)

@@ -6,7 +6,6 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 
 /**
- *@Desc:
  * 可作为根容器的viewGroup
  * 主动或自动装载一个loading view 在最上层
  * 如果在xml 主动加入了loading view，将不会再创建新的目标
@@ -17,10 +16,26 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
     private val loadingView get() = _loadingView!!
 
     constructor(context: Context) : this(context, null)
-    constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet)
+    constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
+        if (isInEditMode) {
+            if (null != attributeSet) {
+                val typeArray =
+                    context.obtainStyledAttributes(attributeSet, R.styleable.LoadingVIew)
+                closeEffect = typeArray.getBoolean(R.styleable.LoadingVIew_closeEffect, false)
+            }
+        }
+    }
+
+    private var closeEffect = false
 
     override fun onFinishInflate() {
         super.onFinishInflate()
+        if (!closeEffect) {
+            init()
+        }
+    }
+
+    private fun init() {
         //检查xml中的loading view
         for (i in 0..childCount) {
             val view = getChildAt(i)

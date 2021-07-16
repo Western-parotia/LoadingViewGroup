@@ -10,9 +10,9 @@
         android:supportsRtl="true"
         android:name=".CustomApplication"
         android:theme="@style/Theme.LoadingViewGroup">
-        <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            >
+        <activity
+            android:name=".EmptyActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
