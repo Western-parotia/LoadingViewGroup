@@ -116,7 +116,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 removeView(bottomPlateView)
                 bottomPlateView = it
                 //就算先添加 BottomPlateView 偶尔也会出现遮挡loading 主动修正一下
-                bottomPlateView.elevation = loadingView.elevation - 0.1F
+                bottomPlateView.elevation = -2F
                 addView(bottomPlateView)
             }
             getLoadingFailView()?.let {
@@ -130,7 +130,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 removeView(emptyView)
                 emptyView = it.apply {
                     visibility = View.GONE
-                    elevation = loadingView.elevation - 0.2F
+                    elevation = -1F
                 }
                 addView(emptyView)
             }

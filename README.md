@@ -41,6 +41,11 @@ implementation("com.foundation.widget:loadingview:版本号")
             </com.foundation.widget.loading.LoadingConstraintLayout>
 ```
 
+主动关闭在xml的预览效果
+```kotlin
+ app:closeEffect="true"
+```
+
 状态切换
 
 ```kotlin
