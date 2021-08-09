@@ -20,7 +20,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     ViewGroup(context, attributeSet), IPageLoading {
     constructor(context: Context) : this(context, null)
 
-    private var closeEffect = false
+    private var closeEffect = true
 
     init {
         if (isInEditMode) {
