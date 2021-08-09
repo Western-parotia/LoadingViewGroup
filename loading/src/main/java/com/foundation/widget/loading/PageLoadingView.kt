@@ -20,14 +20,18 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     ViewGroup(context, attributeSet), IPageLoading {
     constructor(context: Context) : this(context, null)
 
-    private var closeEffect = true
+    /**
+     * 关闭预览模式下的效果
+     */
+    private var closeEffectInEditMode = true
 
     init {
         if (isInEditMode) {
             if (null != attributeSet) {
                 val typeArray =
-                    context.obtainStyledAttributes(attributeSet, R.styleable.LoadingVIew)
-                closeEffect = typeArray.getBoolean(R.styleable.LoadingVIew_closeEffect, false)
+                    context.obtainStyledAttributes(attributeSet, R.styleable.LoadingView)
+                closeEffectInEditMode =
+                    typeArray.getBoolean(R.styleable.LoadingView_closeEffect, false)
             }
         }
     }
@@ -80,7 +84,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (closeEffect) return
+        if (closeEffectInEditMode) return
         bottomPlateView.autoMeasure(this)
         loadingView.autoMeasure(this)
         failView.autoMeasure(this)
@@ -88,7 +92,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (closeEffect) return
+        if (closeEffectInEditMode) return
         bottomPlateView.autoLayoutToCenter(this)
         loadingView.autoLayoutToCenter(this)
         failView.autoLayoutToCenter(this)
