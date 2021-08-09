@@ -20,17 +20,18 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
         if (isInEditMode) {
             if (null != attributeSet) {
                 val typeArray =
-                    context.obtainStyledAttributes(attributeSet, R.styleable.LoadingVIew)
-                closeEffect = typeArray.getBoolean(R.styleable.LoadingVIew_closeEffect, false)
+                    context.obtainStyledAttributes(attributeSet, R.styleable.LoadingView)
+                closeEffectInEditMode =
+                    typeArray.getBoolean(R.styleable.LoadingView_closeEffect, false)
             }
         }
     }
 
-    private var closeEffect = false
+    private var closeEffectInEditMode = false
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        if (!closeEffect) {
+        if (!isInEditMode && !closeEffectInEditMode) {
             init()
         }
     }
