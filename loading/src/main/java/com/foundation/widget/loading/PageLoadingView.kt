@@ -84,7 +84,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (closeEffectInEditMode) return
+        if (isInEditMode && closeEffectInEditMode) return
         bottomPlateView.autoMeasure(this)
         loadingView.autoMeasure(this)
         failView.autoMeasure(this)
@@ -92,7 +92,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (closeEffectInEditMode) return
+        if (isInEditMode && closeEffectInEditMode) return
         bottomPlateView.autoLayoutToCenter(this)
         loadingView.autoLayoutToCenter(this)
         failView.autoLayoutToCenter(this)
