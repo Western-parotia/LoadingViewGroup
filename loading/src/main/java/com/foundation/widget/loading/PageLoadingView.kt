@@ -31,7 +31,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 val typeArray =
                     context.obtainStyledAttributes(attributeSet, R.styleable.LoadingView)
                 closeEffectInEditMode =
-                    typeArray.getBoolean(R.styleable.LoadingView_closeEffect, false)
+                    typeArray.getBoolean(R.styleable.LoadingView_closeEffect, true)
             }
         }
     }
