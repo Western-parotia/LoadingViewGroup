@@ -34,6 +34,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                     typeArray.getBoolean(R.styleable.LoadingView_closeEffect, true)
             }
         }
+        innerStop(false)
     }
 
     private var adapter: PageLoadingAdapter = NormalLoadingAdapter()
@@ -213,15 +214,24 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      * 整体停止并隐藏
      */
     override fun stop() {
+        innerStop(true)
+    }
+
+    private fun innerStop(isAnim: Boolean) {
         removeCallbacks(loadingDelayedRunnable)
-        animate()
-            .alpha(0F)
-            .setDuration(ANIM_DURATION)
-            .withEndAction {
-                visibility = View.GONE
-                adapter.onStop(loadingView, failView)
-            }
-            .start()
+        if (isAnim) {
+            animate()
+                .alpha(0F)
+                .setDuration(ANIM_DURATION)
+                .withEndAction {
+                    visibility = GONE
+                    adapter.onStop(loadingView, failView)
+                }
+                .start()
+        } else {
+            visibility = GONE
+            adapter.onStop(loadingView, failView)
+        }
     }
 
     override fun asLoading(): IPageLoading = this
