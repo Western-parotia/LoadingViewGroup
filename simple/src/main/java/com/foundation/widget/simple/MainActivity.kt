@@ -54,6 +54,12 @@ class MainActivity : AppCompatActivity() {
             binding.contentLoading.showLoading(true)
             binding.streamerLoading.showLoading(false)
         }
+
+        binding.btnDelayedStart.setOnClickListener {
+            binding.normalLoading.showLoadingDelayed(3000L, true)
+            binding.contentLoading.showLoadingDelayed(3000L, true)
+            binding.streamerLoading.showLoadingDelayed(3000L, false)
+        }
         binding.btnStop.setOnClickListener {
             binding.normalLoading.stop()
             binding.contentLoading.stop()

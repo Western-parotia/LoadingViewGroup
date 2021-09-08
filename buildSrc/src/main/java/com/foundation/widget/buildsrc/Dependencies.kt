@@ -34,4 +34,8 @@ object Dependencies {
         const val glide = "com.github.bumptech.glide:glide:4.10.0"
         const val compiler = "com.github.bumptech.glide:compiler:4.10.0"
     }
+
+    object OpenSourceLibrary {
+        const val flex_box = "com.google.android:flexbox:2.0.1"
+    }
 }

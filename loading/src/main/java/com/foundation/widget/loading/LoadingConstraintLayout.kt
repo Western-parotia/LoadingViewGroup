@@ -71,6 +71,10 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
         loadingView.showLoading(showBottomPlate)
     }
 
+    override fun showLoadingDelayed(delayedMills: Long, showBottomPlate: Boolean) {
+        loadingView.showLoadingDelayed(delayedMills, showBottomPlate)
+    }
+
     override fun showLoadingFail(showBottomPlate: Boolean, type: Int, extra: Any?) {
         loadingView.showLoadingFail(showBottomPlate, type, extra)
     }

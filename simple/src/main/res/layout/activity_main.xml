@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="150dp">
+            android:layout_height="150dp"
+            android:orientation="horizontal">
 
             <FrameLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
                 <ImageView
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@drawable/old_man"
-                    android:scaleType="fitXY"
-                    android:layout_height="match_parent" />
+                    android:scaleType="fitXY" />
 
                 <com.foundation.widget.loading.PageLoadingView
-                    android:layout_gravity="center"
                     android:id="@+id/normalLoading"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center" />
             </FrameLayout>
 
         </LinearLayout>
@@ -44,38 +45,38 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_avatar"
-                app:shapeAppearanceOverlay="@style/circleStyle"
-                android:background="@drawable/avatar"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:layout_width="80dp"
-                android:layout_height="80dp" />
+                android:background="@drawable/avatar"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/circleStyle" />
 
             <TextView
                 android:id="@+id/tv"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                app:layout_constraintTop_toTopOf="@+id/iv_avatar"
-                app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constrainedWidth="true"
-                app:layout_constrainedHeight="true"
-                android:ellipsize="end"
-                app:layout_constraintHorizontal_bias="0"
-                android:text="@string/long_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:ellipsize="end"
+                android:text="@string/long_text"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
 
             <ImageView
-                android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@+id/tv"
                 android:layout_width="match_parent"
-                app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_height="150dp"
-                android:background="@drawable/girl" />
+                android:layout_marginTop="20dp"
+                android:background="@drawable/girl"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv" />
 
         </com.foundation.widget.loading.LoadingConstraintLayout>
 
@@ -94,38 +95,46 @@
         </com.foundation.widget.loading.LoadingConstraintLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:flexWrap="wrap">
 
         <Button
             android:id="@+id/btn_start"
             android:layout_width="wrap_content"
-            android:text="开始"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="开始" />
+
+        <Button
+            android:id="@+id/btn_delayed_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="延时3秒开始" />
+
         <Button
             android:id="@+id/btn_stop"
             android:layout_width="wrap_content"
-            android:text="停止"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="停止" />
+
         <Button
             android:id="@+id/btn_showFail"
             android:layout_width="wrap_content"
-            android:text="失败"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="失败" />
 
         <Button
             android:id="@+id/btn_show"
             android:layout_width="wrap_content"
-            android:text="显示"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="显示" />
+    </com.google.android.flexbox.FlexboxLayout>
 
     <Button
         android:id="@+id/btnEmpty"
         android:layout_width="match_parent"
-        android:text="空数据"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="空数据" />
 </LinearLayout>

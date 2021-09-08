@@ -64,8 +64,6 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             addView(this)
         }
     }
-
-
     private var failView: View = adapter.getLoadingFailView() ?: let {
         Button(context).apply {
             text = "点击重试"
@@ -76,6 +74,13 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
     override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit =
         { _: View, _: Int, _: Any? -> }
+
+    private val loadingDelayedRunnable = object : Runnable {
+        var showBottomPlate = true
+        override fun run() {
+            showLoading(showBottomPlate)
+        }
+    }
 
     override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
         adapter = loadingAdapter
@@ -143,6 +148,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun showEmptyView() {
+        removeCallbacks(loadingDelayedRunnable)
         loadingView.animation?.cancel()
         loadingView.animate()
             .alpha(0F)
@@ -165,6 +171,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      */
     override fun showLoading(showBottomPlate: Boolean) {
         "showLoading showBottomPlate=$showBottomPlate".log()
+        removeCallbacks(loadingDelayedRunnable)
         alpha = 1F
         visibility = View.VISIBLE
         failView.visibility = View.GONE
@@ -177,8 +184,15 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         adapter.onShowLoading(loadingView)
     }
 
+    override fun showLoadingDelayed(delayedMills: Long, showBottomPlate: Boolean) {
+        removeCallbacks(loadingDelayedRunnable)
+        loadingDelayedRunnable.showBottomPlate = showBottomPlate
+        postDelayed(loadingDelayedRunnable, delayedMills)
+    }
+
     override fun showLoadingFail(showBottomPlate: Boolean, type: Int, extra: Any?) {
         adapter.onStop(loadingView, failView)
+        removeCallbacks(loadingDelayedRunnable)
         loadingView.animation?.cancel()
         loadingView.animate()
             .alpha(0F)
@@ -199,6 +213,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      * 整体停止并隐藏
      */
     override fun stop() {
+        removeCallbacks(loadingDelayedRunnable)
         animate()
             .alpha(0F)
             .setDuration(ANIM_DURATION)

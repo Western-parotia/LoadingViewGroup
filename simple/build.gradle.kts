@@ -1,4 +1,5 @@
 import com.foundation.widget.buildsrc.Dependencies
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -34,7 +35,7 @@ android {
             )
             signingConfig = signingConfigs.getByName("normalSign")
         }
-        getByName("debug"){
+        getByName("debug") {
             signingConfig = signingConfigs.getByName("normalSign")
         }
     }
@@ -67,6 +68,7 @@ dependencies {
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.Material.material)
     implementation(Dependencies.AndroidX.constraintlayout)
+    implementation(Dependencies.OpenSourceLibrary.flex_box)
 //    implementation("com.foundation.widget:loading:1.0.2-SNAPSHOT")
     implementation(project(":loading"))
 //    implementation(Dependencies.Glide.glide)

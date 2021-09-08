@@ -15,6 +15,11 @@ interface IPageLoading {
     fun showLoading(showBottomPlate: Boolean = true)
 
     /**
+     * 延迟show
+     */
+    fun showLoadingDelayed(delayedMills: Long = 400L, showBottomPlate: Boolean = true)
+
+    /**
      * type 与 extra 将在failViewEventListener中进行回传
      * 便于处理不同失败状态的响应事件
      */
