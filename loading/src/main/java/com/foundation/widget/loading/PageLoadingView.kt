@@ -34,7 +34,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                     typeArray.getBoolean(R.styleable.LoadingView_closeEffect, true)
             }
         }
-        innerStop(false)
+        post { innerStop(false) }
     }
 
     private var adapter: PageLoadingAdapter = NormalLoadingAdapter()
