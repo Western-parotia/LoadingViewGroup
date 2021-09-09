@@ -20,9 +20,12 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
         if (isInEditMode) {
             if (null != attributeSet) {
                 val typeArray =
-                    context.obtainStyledAttributes(attributeSet, R.styleable.LoadingView)
+                    context.obtainStyledAttributes(
+                        attributeSet,
+                        R.styleable.LoadingConstraintLayout
+                    )
                 closeEffectInEditMode =
-                    typeArray.getBoolean(R.styleable.LoadingView_closeEffect, false)
+                    typeArray.getBoolean(R.styleable.LoadingConstraintLayout_closeEffect, false)
                 typeArray.recycle()
             }
         }
