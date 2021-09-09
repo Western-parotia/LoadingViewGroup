@@ -23,6 +23,7 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
                     context.obtainStyledAttributes(attributeSet, R.styleable.LoadingView)
                 closeEffectInEditMode =
                     typeArray.getBoolean(R.styleable.LoadingView_closeEffect, false)
+                typeArray.recycle()
             }
         }
     }

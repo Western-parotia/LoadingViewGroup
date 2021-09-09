@@ -32,6 +32,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                     context.obtainStyledAttributes(attributeSet, R.styleable.LoadingView)
                 closeEffectInEditMode =
                     typeArray.getBoolean(R.styleable.LoadingView_closeEffect, true)
+                typeArray.recycle()
             }
         }
         post { innerStop(false) }
