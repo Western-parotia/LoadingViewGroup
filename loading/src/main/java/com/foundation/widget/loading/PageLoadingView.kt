@@ -29,13 +29,16 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         if (isInEditMode) {
             if (null != attributeSet) {
                 val typeArray =
-                    context.obtainStyledAttributes(attributeSet, R.styleable.LoadingView)
+                    context.obtainStyledAttributes(attributeSet, R.styleable.PageLoadingView)
                 closeEffectInEditMode =
-                    typeArray.getBoolean(R.styleable.LoadingView_closeEffect, true)
+                    typeArray.getBoolean(R.styleable.PageLoadingView_closeEffect, true)
                 typeArray.recycle()
             }
         }
-        post { innerStop(false) }
+        post {
+//         默认启动后 隐藏  loadingView,这样默认只展示骨架图
+            loadingView.visibility = View.GONE
+        }
     }
 
     private var adapter: PageLoadingAdapter = NormalLoadingAdapter()

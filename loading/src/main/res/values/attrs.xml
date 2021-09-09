@@ -8,7 +8,7 @@
         <!--       对循环次数进行模运算，numCount % skipCount == 0-->
         <attr name="sc_skip_count" format="integer" />
     </declare-styleable>
-    <declare-styleable name="LoadingView">
+    <declare-styleable name="PageLoadingView">
         <attr name="closeEffect" format="boolean" />
     </declare-styleable>
 </resources>
