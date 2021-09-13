@@ -95,11 +95,12 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
 
     private fun correctionPath() {
         path.reset()
-        val startX = -streamerWidth * 2
+        val offsetX = 14.dp.toFloat()
+        val startX = -streamerWidth * 2 - offsetX
         val startY = 0F
         val endY = height.toFloat()
         path.moveTo(startX, startY)
-        path.lineTo(-streamerWidth, startY)
+        path.lineTo(-streamerWidth - offsetX, startY)
         path.lineTo(0F, endY)
         path.lineTo(-streamerWidth, endY)
         path.close()
