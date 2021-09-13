@@ -35,10 +35,6 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 typeArray.recycle()
             }
         }
-        post {
-//         默认启动后 隐藏  loadingView,这样默认只展示骨架图
-            loadingView.visibility = View.GONE
-        }
     }
 
     private var adapter: PageLoadingAdapter = NormalLoadingAdapter()
