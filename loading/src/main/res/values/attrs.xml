@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="StreamerConstraintLayout">
-        <attr name="sc_angle" format="integer" />
         <attr name="sc_width" format="dimension" />
         <attr name="sc_color" format="color" />
         <attr name="sc_duration" format="integer" />
