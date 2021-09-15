@@ -35,6 +35,9 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 typeArray.recycle()
             }
         }
+        setOnClickListener {
+            //避免点击到内容页面的View
+        }
     }
 
     private var adapter: PageLoadingAdapter = NormalLoadingAdapter()
