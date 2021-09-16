@@ -43,9 +43,9 @@ class MainActivity : AppCompatActivity() {
         )
         streamerView.addView(tv, lp)
         streamerView.streamerColor = Color.parseColor("#E3E8E8")
-        streamerView.animDuration = 6000L
-        streamerView.skipCount = 2
-        streamerView.streamerWidth = 5F.dp
+        streamerView.animDuration = 7000L
+        streamerView.skipCount = 0
+        streamerView.streamerWidth = 20F.dp
         binding.streamerLoading.setLoadingAdapter(StreamerPageLoadingAdapter(streamerView))
 
         binding.btnStart.setOnClickListener {

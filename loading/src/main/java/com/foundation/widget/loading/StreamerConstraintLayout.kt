@@ -22,7 +22,7 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
 
     private val DEFAULT_STREAMER_WIDTH = 30F.dp
     private val DEFAULT_COLOR = Color.parseColor("#F2F4F7")
-    private val DEFAULT_DURATION = 5000L
+    private val DEFAULT_DURATION = 750L
     private val DEFAULT_SKIP_COUNT = 1
 
     private val path = Path()
@@ -57,7 +57,7 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
 
             })
             addUpdateListener {
-                if (animPlayCount == 0 || animPlayCount % skipCount == 0) {
+                if (animPlayCount == 0 || skipCount == 0 || animPlayCount % skipCount == 0) {
                     progress = it.animatedValue as Float
                     postInvalidate()
                 }
@@ -95,14 +95,13 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
 
     private fun correctionPath() {
         path.reset()
-        val offsetX = 14.dp.toFloat()
-        val startX = -streamerWidth * 2 - offsetX
+        val startX = -streamerWidth
         val startY = 0F
         val endY = height.toFloat()
         path.moveTo(startX, startY)
-        path.lineTo(-streamerWidth - offsetX, startY)
+        path.lineTo(0F, startY)
+        path.lineTo(streamerWidth, endY)
         path.lineTo(0F, endY)
-        path.lineTo(-streamerWidth, endY)
         path.close()
     }
 
