@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
             binding.contentLoading.showLoading(true)
             binding.streamerLoading.showLoading(false)
         }, 3000)
+        binding.normalLoading.verticalOffset = -100
     }
 
 }

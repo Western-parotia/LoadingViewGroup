@@ -20,6 +20,12 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     ViewGroup(context, attributeSet), IPageLoading {
     constructor(context: Context) : this(context, null)
 
+    var verticalOffset: Int = 0
+        set(value) {
+            field = value
+            requestLayout()
+        }
+
     /**
      * 关闭预览模式下的效果
      */
@@ -102,11 +108,13 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         if (isInEditMode && closeEffectInEditMode) return
+        /*底板 不可以挪*/
         bottomPlateView.autoLayoutToCenter(this)
-        loadingView.autoLayoutToCenter(this)
-        failView.autoLayoutToCenter(this)
-        emptyView.autoLayoutToCenter(this)
+        loadingView.autoLayoutToCenter(this, verticalOffset)
+        failView.autoLayoutToCenter(this, verticalOffset)
+        emptyView.autoLayoutToCenter(this, verticalOffset)
     }
+
 
     override fun onDetachedFromWindow() {
         adapter.onStop(loadingView, failView)

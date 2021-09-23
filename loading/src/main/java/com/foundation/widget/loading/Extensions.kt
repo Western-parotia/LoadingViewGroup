@@ -11,7 +11,7 @@ import android.view.ViewGroup
  *-
  *create by zhusw on 5/6/21 18:08
  */
-private const val TAG ="BaseLoadingWidget"
+private const val TAG = "BaseLoadingWidget"
 internal fun String.log(secTAG: String = "") {
     if (BuildConfig.DEBUG) {
         println("$TAG : $secTAG $this")
@@ -44,7 +44,8 @@ internal fun View.defaultWidthMeasureSpec(parentView: ViewGroup): Int {
         }
     }
 }
-internal fun View.defaultHeightMeasureSpec(parentView: ViewGroup):Int{
+
+internal fun View.defaultHeightMeasureSpec(parentView: ViewGroup): Int {
     return when (layoutParams.height) {
         MATCH_PARENT -> parentView.measuredHeight.toExactlyMeasureSpec()
         WRAP_CONTENT -> WRAP_CONTENT.toAtMostMeasureSpec()
@@ -54,16 +55,19 @@ internal fun View.defaultHeightMeasureSpec(parentView: ViewGroup):Int{
         }
     }
 }
-internal fun View.autoMeasure(parentView: ViewGroup){
+
+internal fun View.autoMeasure(parentView: ViewGroup) {
     measure(
         defaultWidthMeasureSpec(parentView),
         defaultHeightMeasureSpec(parentView),
     )
 }
 
-internal fun View.autoLayoutToCenter(parentView: ViewGroup){
-    layout((parentView.measuredWidth  - measuredWidth) /2,
-        (parentView.measuredHeight - measuredHeight) /2,
-        (parentView.measuredWidth  + measuredWidth) /2,
-        (parentView.measuredHeight  + measuredHeight) /2)
+internal fun View.autoLayoutToCenter(parentView: ViewGroup, verticalOffset: Int = 0) {
+    layout(
+        (parentView.measuredWidth - measuredWidth) / 2,
+        (parentView.measuredHeight - measuredHeight) / 2 + verticalOffset,
+        (parentView.measuredWidth + measuredWidth) / 2,
+        (parentView.measuredHeight + measuredHeight) / 2 + verticalOffset
+    )
 }
