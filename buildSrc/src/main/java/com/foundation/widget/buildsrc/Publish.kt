@@ -11,8 +11,8 @@ import java.io.File
  *create by zhusw on 5/6/21 16:43
  */
 
-private const val VERSION = "1.1.3"
-private const val SNAPSHOT = true
+private const val VERSION = "1.1.5"
+private const val SNAPSHOT = false
 
 object Publish {
     object Version {

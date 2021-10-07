@@ -6,7 +6,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.view.animation.LinearInterpolator
+import android.view.animation.AccelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 
 /**
@@ -21,15 +21,13 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
     constructor(context: Context) : this(context, null)
 
     private val DEFAULT_STREAMER_WIDTH = 30F.dp
-    private val DEFAULT_ANGLE_SIZE = 30
     private val DEFAULT_COLOR = Color.parseColor("#F2F4F7")
-    private val DEFAULT_DURATION = 5000L
+    private val DEFAULT_DURATION = 750L
     private val DEFAULT_SKIP_COUNT = 1
 
     private val path = Path()
     private val xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
     var streamerWidth: Float
-    var angleSize: Int
     var streamerColor: Int
     var animDuration: Long
     var skipCount = DEFAULT_SKIP_COUNT
@@ -42,7 +40,7 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
         ObjectAnimator.ofFloat(0F, 1F).apply {
             repeatMode = ValueAnimator.RESTART
             repeatCount = ValueAnimator.INFINITE
-            interpolator = LinearInterpolator()
+            interpolator = AccelerateInterpolator()
             addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator?) {
                 }
@@ -59,7 +57,7 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
 
             })
             addUpdateListener {
-                if (animPlayCount == 0 || animPlayCount % skipCount == 0) {
+                if (animPlayCount == 0 || skipCount == 0 || animPlayCount % skipCount == 0) {
                     progress = it.animatedValue as Float
                     postInvalidate()
                 }
@@ -75,10 +73,7 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
                 R.styleable.StreamerConstraintLayout_sc_width,
                 DEFAULT_STREAMER_WIDTH.toInt()
             ).toFloat()
-            angleSize = typeArray.getInt(
-                R.styleable.StreamerConstraintLayout_sc_angle,
-                DEFAULT_ANGLE_SIZE.toInt()
-            )
+
             streamerColor =
                 typeArray.getColor(R.styleable.StreamerConstraintLayout_sc_color, DEFAULT_COLOR)
             animDuration = typeArray.getInt(
@@ -93,7 +88,6 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
             typeArray.recycle()
         } else {
             streamerWidth = DEFAULT_STREAMER_WIDTH
-            angleSize = DEFAULT_ANGLE_SIZE
             streamerColor = DEFAULT_COLOR
             animDuration = DEFAULT_DURATION
         }
@@ -102,23 +96,19 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
     private fun correctionPath() {
         path.reset()
         val startX = -streamerWidth
-        val startY = height / 2F
+        val startY = 0F
+        val endY = height.toFloat()
         path.moveTo(startX, startY)
-        val cos = Math.cos(Math.toRadians(angleSize.toDouble()))
-        val c = Math.abs(streamerWidth / cos)
-        val num = c * c - (streamerWidth * streamerWidth)
-        //y轴 长度
-        val b = Math.sqrt(num).toFloat()
-        path.lineTo(startX + streamerWidth, startY + b)
-        path.lineTo(startX + streamerWidth, startY + height)
-        path.lineTo(startX, startY + (height - b))
+        path.lineTo(0F, startY)
+        path.lineTo(streamerWidth, endY)
+        path.lineTo(0F, endY)
         path.close()
     }
 
     override fun dispatchDraw(canvas: Canvas) {
         val count = canvas.saveLayer(0F, 0F, width.toFloat(), height.toFloat(), null)
         val translateX = progress * (width + streamerWidth)
-        val translateY = progress * height
+        val translateY = 0F
         super.dispatchDraw(canvas)//内容
         paintStreamer.xfermode = xfermode
         paintStreamer.color = streamerColor

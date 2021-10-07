@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="StreamerConstraintLayout">
-        <attr name="sc_angle" format="integer" />
         <attr name="sc_width" format="dimension" />
         <attr name="sc_color" format="color" />
         <attr name="sc_duration" format="integer" />
         <!--       对循环次数进行模运算，numCount % skipCount == 0-->
         <attr name="sc_skip_count" format="integer" />
     </declare-styleable>
-    <declare-styleable name="LoadingView">
-        <attr name="closeEffect" format="boolean" />
+    <attr name="closeEffect" format="boolean" />
+    <declare-styleable name="PageLoadingView">
+        <attr name="closeEffect" />
+    </declare-styleable>
+    <declare-styleable name="LoadingConstraintLayout">
+        <attr name="closeEffect" />
     </declare-styleable>
 </resources>
