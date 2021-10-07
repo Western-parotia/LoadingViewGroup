@@ -1,6 +1,7 @@
 package com.foundation.widget.simple
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat
 import com.foundation.widget.loading.PageLoadingAdapter
 import com.foundation.widget.loading.StreamerConstraintLayout
 import com.foundation.widget.loading.StreamerPageLoadingAdapter
+import com.foundation.widget.simple.attach.AttachActivity
 import com.foundation.widget.simple.databinding.ActivityMainBinding
 
 internal val Float.dp get() = this * Resources.getSystem().displayMetrics.density + 0.5F
@@ -103,6 +105,10 @@ class MainActivity : AppCompatActivity() {
             binding.streamerLoading.showLoading(false)
         }, 3000)
         binding.normalLoading.verticalOffset = -100
+
+        binding.btnAttach.setOnClickListener {
+            startActivity(Intent(this, AttachActivity::class.java))
+        }
     }
 
 }

@@ -130,6 +130,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="显示" />
+
+        <Button
+            android:id="@+id/btnAttach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Attach恢复测试" />
     </com.google.android.flexbox.FlexboxLayout>
 
     <Button

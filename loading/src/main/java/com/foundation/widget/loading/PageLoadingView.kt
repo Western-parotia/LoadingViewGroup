@@ -31,7 +31,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      */
     private var closeEffectInEditMode = true
 
-    private var isLoading = false
+    private var loadingState = LoadingState(isLoading = false, showBottomPlate = true)
 
     init {
         if (isInEditMode) {
@@ -117,9 +117,21 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         emptyView.autoLayoutToCenter(this, verticalOffset)
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        loadingState.detachState?.let {
+            if (it.isLoading) {
+                showLoading(it.showBottomPlate)
+            }
+        }
+    }
 
     override fun onDetachedFromWindow() {
-        dismissLoading(loadingView, failView)
+        if (loadingState.isLoading) {
+            val state = loadingState.copy()
+            dismissLoading(loadingView, failView)
+            loadingState.detachState = state
+        }
         animation?.cancel()
         for (i in 0 until childCount) {
             val view = getChildAt(i)
@@ -188,7 +200,8 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         "showLoading showBottomPlate=$showBottomPlate".log()
 
         dismissLoading(loadingView, failView)
-        isLoading = true
+        loadingState.isLoading = true
+        loadingState.showBottomPlate = showBottomPlate
 
         removeCallbacks(loadingDelayedRunnable)
         alpha = 1F
@@ -229,8 +242,9 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     private fun dismissLoading(loadingView: View, view: View?) {
-        if (isLoading) {
-            isLoading = false
+        loadingState.detachState = null
+        if (loadingState.isLoading) {
+            loadingState.isLoading = false
             adapter.onDismissLoading(loadingView, view)
         }
     }
@@ -239,24 +253,15 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      * 整体停止并隐藏
      */
     override fun stop() {
-        innerStop(true)
-    }
-
-    private fun innerStop(isAnim: Boolean) {
         removeCallbacks(loadingDelayedRunnable)
-        if (isAnim) {
-            animate()
-                .alpha(0F)
-                .setDuration(ANIM_DURATION)
-                .withEndAction {
-                    visibility = GONE
-                    dismissLoading(loadingView, failView)
-                }
-                .start()
-        } else {
-            visibility = GONE
-            dismissLoading(loadingView, failView)
-        }
+        animate()
+            .alpha(0F)
+            .setDuration(ANIM_DURATION)
+            .withEndAction {
+                visibility = GONE
+                dismissLoading(loadingView, failView)
+            }
+            .start()
     }
 
     override fun asLoading(): IPageLoading = this
@@ -269,5 +274,13 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     fun checkLoadingState() {
         alpha = 1F
         visibility = View.VISIBLE
+    }
+
+
+    private data class LoadingState(var isLoading: Boolean, var showBottomPlate: Boolean) {
+        /**
+         * detach是不是在loading中，如果是true，则attach时会再次show
+         */
+        var detachState: LoadingState? = null
     }
 }
