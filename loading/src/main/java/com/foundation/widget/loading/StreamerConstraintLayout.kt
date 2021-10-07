@@ -93,6 +93,12 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
         }
     }
 
+    private val startRunnable = Runnable {
+        correctionPath()
+        floatAnim.duration = animDuration
+        floatAnim.start()
+    }
+
     private fun correctionPath() {
         path.reset()
         val startX = -streamerWidth
@@ -121,16 +127,16 @@ class StreamerConstraintLayout(context: Context, attributeSet: AttributeSet?) :
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
+        removeCallbacks(startRunnable)
         floatAnim.cancel()
     }
 
     fun start() {
-        correctionPath()
-        floatAnim.duration = animDuration
-        floatAnim.start()
+        post(startRunnable)
     }
 
     fun stop() {
+        removeCallbacks(startRunnable)
         progress = 1.0F
         invalidate()
         floatAnim.cancel()
