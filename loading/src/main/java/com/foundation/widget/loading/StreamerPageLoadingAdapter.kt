@@ -35,7 +35,7 @@ open class StreamerPageLoadingAdapter(val streamerView: StreamerConstraintLayout
     override fun onShowEmptyView(emptyView: View) {
     }
 
-    override fun onStop(loadingView: View?, failView: View?) {
+    override fun onDismissLoading(loadingView: View?, failView: View?) {
         streamerView.stop()
     }
 

@@ -26,8 +26,6 @@ open class NormalLoadingAdapter : PageLoadingAdapter {
      * 属性动画 默认是弱引用的，不必考虑释放问题
      */
     override fun onShowLoading(loadingView: View) {
-        //今内部借用stop 处理，每次loading 都作为新都开始
-        onStop(loadingView, null)
         ObjectAnimator.ofFloat(loadingView, "rotationX", 0F, 200F).apply {
             repeatCount = Animation.INFINITE
             duration = ANIM_DURATION_LONG
@@ -60,7 +58,7 @@ open class NormalLoadingAdapter : PageLoadingAdapter {
 
     }
 
-    override fun onStop(loadingView: View?, failView: View?) {
+    override fun onDismissLoading(loadingView: View?, failView: View?) {
         loadingView?.animation?.cancel()
         animCache.forEach { _, value ->
             value.cancel()

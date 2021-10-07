@@ -31,6 +31,8 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      */
     private var closeEffectInEditMode = true
 
+    private var isLoading = false
+
     init {
         if (isInEditMode) {
             if (null != attributeSet) {
@@ -117,7 +119,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
 
 
     override fun onDetachedFromWindow() {
-        adapter.onStop(loadingView, failView)
+        dismissLoading(loadingView, failView)
         animation?.cancel()
         for (i in 0 until childCount) {
             val view = getChildAt(i)
@@ -160,6 +162,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun showEmptyView() {
+        dismissLoading(loadingView, failView)
         removeCallbacks(loadingDelayedRunnable)
         loadingView.animation?.cancel()
         loadingView.animate()
@@ -183,6 +186,10 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      */
     override fun showLoading(showBottomPlate: Boolean) {
         "showLoading showBottomPlate=$showBottomPlate".log()
+
+        dismissLoading(loadingView, failView)
+        isLoading = true
+
         removeCallbacks(loadingDelayedRunnable)
         alpha = 1F
         visibility = View.VISIBLE
@@ -203,7 +210,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun showLoadingFail(showBottomPlate: Boolean, type: Int, extra: Any?) {
-        adapter.onStop(loadingView, failView)
+        dismissLoading(loadingView, failView)
         removeCallbacks(loadingDelayedRunnable)
         loadingView.animation?.cancel()
         loadingView.animate()
@@ -221,6 +228,13 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             .start()
     }
 
+    private fun dismissLoading(loadingView: View, view: View?) {
+        if (isLoading) {
+            isLoading = false
+            adapter.onDismissLoading(loadingView, view)
+        }
+    }
+
     /**
      * 整体停止并隐藏
      */
@@ -236,12 +250,12 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                 .setDuration(ANIM_DURATION)
                 .withEndAction {
                     visibility = GONE
-                    adapter.onStop(loadingView, failView)
+                    dismissLoading(loadingView, failView)
                 }
                 .start()
         } else {
             visibility = GONE
-            adapter.onStop(loadingView, failView)
+            dismissLoading(loadingView, failView)
         }
     }
 

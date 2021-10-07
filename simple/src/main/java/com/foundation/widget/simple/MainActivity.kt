@@ -175,7 +175,7 @@ class MyContentLoadingAdapter(private val context: Context) :
     /**
      * 停止动画
      */
-    override fun onStop(loadingView: View?, failView: View?) {
+    override fun onDismissLoading(loadingView: View?, failView: View?) {
         val anim = loadingView?.background as? Animatable
         anim?.stop()
     }
