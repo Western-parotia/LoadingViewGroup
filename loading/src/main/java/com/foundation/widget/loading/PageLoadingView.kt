@@ -87,6 +87,9 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit =
         { _: View, _: Int, _: Any? -> }
 
+    override var isLoading: Boolean = false
+        private set
+
     private val loadingDelayedRunnable = object : Runnable {
         var showBottomPlate = true
         override fun run() {
@@ -171,6 +174,8 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             }
 
         }
+
+        isLoading = false
     }
 
     override fun showEmptyView() {
@@ -214,6 +219,8 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             if (alpha != 1F) alpha = 1F
         }
         adapter.onShowLoading(loadingView)
+
+        isLoading = true
     }
 
     override fun showLoadingDelayed(delayedMills: Long, showBottomPlate: Boolean) {
@@ -247,6 +254,8 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             loadingState.isLoading = false
             adapter.onDismissLoading(loadingView, view)
         }
+
+        isLoading = false
     }
 
     /**

@@ -61,11 +61,14 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
     }
 
     override fun asLoading(): IPageLoading = this
+
     override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit
         get() = loadingView.failViewEventListener
         set(value) {
             loadingView.failViewEventListener = value
         }
+
+    override val isLoading = loadingView.isLoading
 
     override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
         loadingView.setLoadingAdapter(loadingAdapter)

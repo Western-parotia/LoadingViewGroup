@@ -11,6 +11,8 @@ import android.view.View
  */
 interface IPageLoading {
     var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit
+    val isLoading: Boolean
+
     fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter)
     fun showLoading(showBottomPlate: Boolean = true)
 
