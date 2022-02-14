@@ -87,8 +87,8 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit =
         { _: View, _: Int, _: Any? -> }
 
-    override var isLoading: Boolean = false
-        private set
+    override val isLoading
+        get() = loadingState.isLoading
 
     private val loadingDelayedRunnable = object : Runnable {
         var showBottomPlate = true
@@ -175,7 +175,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
 
         }
 
-        isLoading = false
+        loadingState.isLoading = false
     }
 
     override fun showEmptyView() {
@@ -219,8 +219,6 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             if (alpha != 1F) alpha = 1F
         }
         adapter.onShowLoading(loadingView)
-
-        isLoading = true
     }
 
     override fun showLoadingDelayed(delayedMills: Long, showBottomPlate: Boolean) {
@@ -254,8 +252,6 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
             loadingState.isLoading = false
             adapter.onDismissLoading(loadingView, view)
         }
-
-        isLoading = false
     }
 
     /**
@@ -263,14 +259,16 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      */
     override fun stop() {
         removeCallbacks(loadingDelayedRunnable)
-        animate()
-            .alpha(0F)
-            .setDuration(ANIM_DURATION)
-            .withEndAction {
-                visibility = GONE
-                dismissLoading(loadingView, failView)
-            }
-            .start()
+        if (loadingState.isLoading) {
+            animate()
+                .alpha(0F)
+                .setDuration(ANIM_DURATION)
+                .withEndAction {
+                    visibility = GONE
+                    dismissLoading(loadingView, failView)
+                }
+                .start()
+        }
     }
 
     override fun asLoading(): IPageLoading = this
