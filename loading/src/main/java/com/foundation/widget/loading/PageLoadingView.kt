@@ -268,6 +268,8 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
                     dismissLoading(loadingView, failView)
                 }
                 .start()
+        } else {
+            visibility = GONE
         }
     }
 
