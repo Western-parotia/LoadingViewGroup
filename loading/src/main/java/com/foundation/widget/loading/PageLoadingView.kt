@@ -259,19 +259,15 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      */
     override fun stop() {
         removeCallbacks(loadingDelayedRunnable)
-        if (loadingState.isLoading) {
-            animate()
-                .alpha(0F)
-                .setDuration(ANIM_DURATION)
-                .withEndAction {
-                    visibility = GONE
-                    dismissLoading(loadingView, failView)
-                }
-                .start()
-            loadingState.isLoading = false
-        } else {
-            visibility = GONE
-        }
+        loadingView.animation?.cancel()
+        animate()
+            .alpha(0F)
+            .setDuration(ANIM_DURATION)
+            .withEndAction {
+                visibility = GONE
+                dismissLoading(loadingView, failView)
+            }
+            .start()
     }
 
     override fun asLoading(): IPageLoading = this
