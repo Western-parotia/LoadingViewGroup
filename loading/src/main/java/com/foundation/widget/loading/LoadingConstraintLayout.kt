@@ -68,7 +68,7 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
             loadingView.failViewEventListener = value
         }
 
-    override val isLoading = loadingView.isLoading
+    override val isLoading get() = loadingView.isLoading
 
     override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
         loadingView.setLoadingAdapter(loadingAdapter)
