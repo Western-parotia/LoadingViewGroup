@@ -62,7 +62,7 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
 
     override fun asLoading(): IPageLoading = this
 
-    override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit
+    override var failViewEventListener: ((view: View, type: Int, extra: Any?) -> Unit)?
         get() = loadingView.failViewEventListener
         set(value) {
             loadingView.failViewEventListener = value
@@ -86,7 +86,7 @@ class LoadingConstraintLayout : ConstraintLayout, IPageLoading {
         loadingView.showLoadingFail(showBottomPlate, type, extra)
     }
 
-    override fun showEmptyView() {
+    override fun showEmptyView(showBottomPlate: Boolean) {
         loadingView.showEmptyView()
     }
 

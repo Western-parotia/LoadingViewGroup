@@ -10,7 +10,7 @@ import android.view.View
  * create by zhusw on 5/10/21 14:02
  */
 interface IPageLoading {
-    var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit
+    var failViewEventListener: ((view: View, type: Int, extra: Any?) -> Unit)?
     val isLoading: Boolean
 
     fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter)
@@ -27,7 +27,7 @@ interface IPageLoading {
      */
     fun showLoadingFail(showBottomPlate: Boolean = true, type: Int = 0, extra: Any? = null)
 
-    fun showEmptyView()
+    fun showEmptyView(showBottomPlate: Boolean = true)
     fun stop()
     fun asLoading(): IPageLoading
 }
