@@ -120,7 +120,7 @@ class MyContentLoadingAdapter : PageLoadingAdapter() {
     /**
      * 设置骨架图
      */
-    override fun getBottomPlateView(): View = AppCompatImageView(context).apply {
+    override fun getBottomPlateView(): View = AppCompatImageView(attachContext).apply {
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             350.dp
@@ -131,7 +131,7 @@ class MyContentLoadingAdapter : PageLoadingAdapter() {
     /**
      * 自定义加载动画的View
      */
-    override fun getLoadingView(): AppCompatImageView = AppCompatImageView(context).apply {
+    override fun getLoadingView(): AppCompatImageView = AppCompatImageView(attachContext).apply {
         background = ContextCompat.getDrawable(context, R.drawable.dw_loading)
     }
 
@@ -147,14 +147,14 @@ class MyContentLoadingAdapter : PageLoadingAdapter() {
      * 设置失败展示
      */
     override fun getLoadingFailView(): View = LayoutInflater
-        .from(context)
+        .from(attachContext)
         .inflate(R.layout.fail, null).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
 
-    override fun getEmptyView(): View = TextView(context).apply {
+    override fun getEmptyView(): View = TextView(attachContext).apply {
         text = "无数据"
         visibility = View.INVISIBLE
         elevation = singleLoadingView.elevation - 0.2F

@@ -21,17 +21,15 @@ private const val ANIM_DURATION_LONG = 800L
 open class NormalLoadingAdapter : PageLoadingAdapter() {
     private val animCache: SparseArray<ObjectAnimator> = SparseArray()
 
-    override fun getBottomPlateView(): View? = null
-
     override fun getLoadingView(): View =
-        ImageView(context).apply {
+        ImageView(attachContext).apply {
             visibility = View.VISIBLE
             layoutParams = ViewGroup.LayoutParams(34.dp, 34.dp)
             setBackgroundResource(R.drawable.loading_ic_baseline_hourglass_top_48)
         }
 
     override fun getLoadingFailView(): View =
-        TextView(context).apply {
+        TextView(attachContext).apply {
             text = "点击重试"
             setPadding(20, 10, 20, 10)
             setBackgroundColor(0xffeeeeee.toInt())
@@ -40,7 +38,7 @@ open class NormalLoadingAdapter : PageLoadingAdapter() {
         }
 
     override fun getEmptyView(): View =
-        TextView(context).apply {
+        TextView(attachContext).apply {
             layoutParams = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             text = "无数据"
             visibility = View.INVISIBLE
@@ -65,18 +63,6 @@ open class NormalLoadingAdapter : PageLoadingAdapter() {
             duration = ANIM_DURATION_LONG
             start()
             animCache.put(animCache.size(), this)
-        }
-    }
-
-    override fun onShowFail(
-        type: Int,
-        extra: Any?,
-        failViewEvent: ((view: View, type: Int, extra: Any?) -> Unit)?
-    ) {
-        if (failViewEvent != null) {
-            singleLoadingFailView.setOnClickListener {
-                failViewEvent.invoke(singleLoadingFailView, type, extra)
-            }
         }
     }
 

@@ -16,7 +16,7 @@ open class ArchLoadingAdapter(
 ) : NormalLoadingAdapter() {
 
     override fun getEmptyView(): View {
-        return View(context).apply {
+        return View(attachContext).apply {
             setBackgroundColor(0xff999999.toInt())
             layoutParams = ViewGroup.LayoutParams(100, 100)
             setOnClickListener { onRetryClick?.invoke() }
@@ -24,7 +24,7 @@ open class ArchLoadingAdapter(
     }
 
     override fun getLoadingView(): View {
-        return StreamerConstraintLayout(context).apply {
+        return StreamerConstraintLayout(attachContext).apply {
             val wh = 500
             val sw = 100f //比设计稿 小点
             animDuration = 750L
