@@ -1,7 +1,6 @@
 package com.foundation.widget.loading
 
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,8 @@ abstract class PageLoadingAdapter {
     private var _parentLoading: IPageLoading? = null
     private var _parentView: ViewGroup? = null
     val parentView: ViewGroup
-        get() = _parentView ?: throw IllegalStateException("parentView必须在setAdapter之后才能调用")
+        get() = _parentView
+            ?: throw IllegalStateException("parentView必须在setAdapter之后才能调用，或者使用lazyOnAttached方法")
 
     /**
      * 注意调用时机，只能在setAdapter之后。[getBottomPlateView]等可以直接使用
@@ -132,7 +132,7 @@ abstract class PageLoadingAdapter {
     protected open fun getBottomPlateView(): View =
         View(attachContext).apply {
             layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            background = ColorDrawable(GlobalLoadingConfig.onInitForegroundColor)
+            setBackgroundColor(GlobalLoadingConfig.onInitForegroundColor)
             elevation = singleLoadingView.elevation - 0.1F
             isVisible = true
         }
