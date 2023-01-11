@@ -181,6 +181,8 @@ class PageLoadingView @JvmOverloads constructor(
     }
 
     override fun showLoadingFail(showBottomPlate: Boolean, type: Int, extra: Any?) {
+        addViewAndGone(adapter.singleLoadingFailView)
+
         calDismissLoading()
         removeCallbacks(loadingDelayedRunnable)
         adapter.singleLoadingView.animation?.cancel()
