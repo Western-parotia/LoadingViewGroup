@@ -106,6 +106,9 @@ abstract class PageLoadingAdapter {
      * 当被setAdapter时，会率先调用此方法
      */
     internal fun <T> attachToParent(parent: T) where T : ViewGroup, T : IPageLoading {
+        //重置view
+        notifyViewChanged()
+
         _parentView = parent
         _parentLoading = parent
         lazyAttachListener?.forEach {
