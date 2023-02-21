@@ -106,9 +106,7 @@ abstract class PageLoadingAdapter {
      * 当被setAdapter时，会率先调用此方法
      */
     internal fun <T> attachToParent(parent: T) where T : ViewGroup, T : IPageLoading {
-        //重置view
-        notifyViewChanged()
-
+        clearViews()
         _parentView = parent
         _parentLoading = parent
         lazyAttachListener?.forEach {
@@ -122,11 +120,15 @@ abstract class PageLoadingAdapter {
      * notify后会重新回到默认loading状态
      */
     fun notifyViewChanged() {
+        clearViews()
+        _parentLoading?.setLoadingAdapter(this)
+    }
+
+    private fun clearViews() {
         _singleBottomPlateView = null
         _singleLoadingView = null
         _singleLoadingFailView = null
         _singleEmptyView = null
-        _parentLoading?.setLoadingAdapter(this)
     }
 
     /**
