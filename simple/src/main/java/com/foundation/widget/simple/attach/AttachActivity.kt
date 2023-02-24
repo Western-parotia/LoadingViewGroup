@@ -40,7 +40,7 @@ class AttachActivity : AppCompatActivity() {
             savedInstanceState: Bundle?
         ): View {
             return PageLoadingView(requireActivity()).apply {
-                setLoadingAdapter(ArchLoadingAdapter(requireActivity()) {
+                setLoadingAdapter(ArchLoadingAdapter {
                     showLoading(this)
                 })
                 layoutParams = ViewGroup.LayoutParams(

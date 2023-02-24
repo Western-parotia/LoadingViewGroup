@@ -1,6 +1,5 @@
 package com.foundation.widget.simple
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.contentLoading.setLoadingAdapter(MyContentLoadingAdapter(this))
+        binding.contentLoading.setLoadingAdapter(MyContentLoadingAdapter())
 
         val streamerView = StreamerConstraintLayout(this)
         val tv = TextView(this)
@@ -116,13 +115,12 @@ class MainActivity : AppCompatActivity() {
 /**
  * 自定义loading逻辑
  */
-class MyContentLoadingAdapter(private val context: Context) :
-    PageLoadingAdapter {
+class MyContentLoadingAdapter : PageLoadingAdapter() {
 
     /**
      * 设置骨架图
      */
-    override fun getBottomPlateView(): View = AppCompatImageView(context).apply {
+    override fun getBottomPlateView(): View = AppCompatImageView(attachContext).apply {
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             350.dp
@@ -133,56 +131,57 @@ class MyContentLoadingAdapter(private val context: Context) :
     /**
      * 自定义加载动画的View
      */
-    private val loadingView = AppCompatImageView(context).apply {
+    override fun getLoadingView(): AppCompatImageView = AppCompatImageView(attachContext).apply {
         background = ContextCompat.getDrawable(context, R.drawable.dw_loading)
     }
-
-    override fun getLoadingView(): AppCompatImageView? = loadingView
 
     /**
      * 展示动画
      */
-    override fun onShowLoading(loadingView: View) {
-        val anim = loadingView.background as? Animatable
+    override fun onShowLoading() {
+        val anim = singleLoadingFailView.background as? Animatable
         anim?.start()
     }
 
     /**
      * 设置失败展示
      */
-    override fun getLoadingFailView(): View? = LayoutInflater
-        .from(context)
+    override fun getLoadingFailView(): View = LayoutInflater
+        .from(attachContext)
         .inflate(R.layout.fail, null).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
 
-    override fun getEmptyView(): View? = null
+    override fun getEmptyView(): View = TextView(attachContext).apply {
+        text = "无数据"
+        visibility = View.INVISIBLE
+        elevation = singleLoadingView.elevation - 0.2F
+    }
 
 
     /**
      * 设置失败响应事件
      */
     override fun onShowFail(
-        failView: View,
         type: Int,
         extra: Any?,
-        failViewEvent: (view: View, type: Int, extra: Any?) -> Unit
+        failViewEvent: ((view: View, type: Int, extra: Any?) -> Unit)?
     ) {
-        failView.findViewById<View>(R.id.btn).setOnClickListener {
-            failViewEvent.invoke(failView, type, extra)
+        singleLoadingFailView.findViewById<View>(R.id.btn).setOnClickListener {
+            failViewEvent?.invoke(singleLoadingFailView, type, extra)
         }
     }
 
-    override fun onShowEmptyView(emptyView: View) {
+    override fun onShowEmptyView() {
     }
 
     /**
      * 停止动画
      */
-    override fun onDismissLoading(loadingView: View?, failView: View?) {
-        val anim = loadingView?.background as? Animatable
+    override fun onDismissLoading() {
+        val anim = singleLoadingFailView.background as? Animatable
         anim?.stop()
     }
 

@@ -3,10 +3,10 @@ package com.foundation.widget.loading
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.FrameLayout
+import androidx.core.view.contains
+import androidx.core.view.forEach
+import androidx.core.view.isVisible
 
 /**
  *@Desc:
@@ -14,11 +14,15 @@ import android.widget.TextView
  *- 它只会测量和拜访内置的子view
  *create by zhusw on 5/6/21 17:08
  */
-private const val ANIM_DURATION = 400L
 
-class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
-    ViewGroup(context, attributeSet), IPageLoading {
-    constructor(context: Context) : this(context, null)
+class PageLoadingView @JvmOverloads constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) :
+    FrameLayout(context, attributeSet, defStyleAttr), IPageLoading {
+
+    private val ANIM_DURATION = 400L
 
     var verticalOffset: Int = 0
         set(value) {
@@ -48,44 +52,18 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         }
     }
 
-    private var adapter: PageLoadingAdapter = NormalLoadingAdapter()
+    private var _adapter: PageLoadingAdapter? = null
+    private val adapter: PageLoadingAdapter
+        get() {
+            _adapter?.let {
+                return it
+            }
+            return NormalLoadingAdapter().also {
+                setLoadingAdapter(it)
+            }
+        }
 
-    private var loadingView: View = adapter.getLoadingView() ?: let {
-        ImageView(context).apply {
-            visibility = View.VISIBLE
-            layoutParams = LayoutParams(34.dp, 34.dp)
-            setBackgroundResource(R.drawable.loading_ic_baseline_hourglass_top_48)
-            addView(this)
-        }
-    }
-    private var bottomPlateView: View = adapter.getBottomPlateView() ?: let {
-        View(context).apply {
-            layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            background = DRAWABLE_WHITE
-            elevation = loadingView.elevation - 0.1F
-            visibility = View.VISIBLE
-            addView(this)
-        }
-    }
-    private var emptyView: View = adapter.getEmptyView() ?: let {
-        TextView(context).apply {
-            layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            text = "无数据"
-            visibility = View.INVISIBLE
-            elevation = loadingView.elevation - 0.2F
-            addView(this)
-        }
-    }
-    private var failView: View = adapter.getLoadingFailView() ?: let {
-        Button(context).apply {
-            text = "点击重试"
-            layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            addView(this)
-            visibility = View.INVISIBLE
-        }
-    }
-    override var failViewEventListener: (view: View, type: Int, extra: Any?) -> Unit =
-        { _: View, _: Int, _: Any? -> }
+    override var failViewEventListener: ((view: View, type: Int, extra: Any?) -> Unit)? = null
 
     override val isLoading
         get() = loadingState.isLoading
@@ -98,26 +76,17 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun setLoadingAdapter(loadingAdapter: PageLoadingAdapter) {
-        adapter = loadingAdapter
-        resetLayout()
-    }
+        _adapter = loadingAdapter
+        loadingAdapter.attachToParent(this)
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (isInEditMode && closeEffectInEditMode) return
-        bottomPlateView.autoMeasure(this)
-        loadingView.autoMeasure(this)
-        failView.autoMeasure(this)
-        emptyView.autoMeasure(this)
-    }
+        loadingState.isLoading = false
+        removeAllViews()
 
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (isInEditMode && closeEffectInEditMode) return
-        /*底板 不可以挪*/
-        bottomPlateView.autoLayoutToCenter(this)
-        loadingView.autoLayoutToCenter(this, verticalOffset)
-        failView.autoLayoutToCenter(this, verticalOffset)
-        emptyView.autoLayoutToCenter(this, verticalOffset)
+        addView(adapter.singleLoadingView)
+
+        //就算先添加 BottomPlateView 偶尔也会出现遮挡loading 主动修正一下
+        adapter.singleBottomPlateView.elevation = -2F
+        addView(adapter.singleBottomPlateView)
     }
 
     override fun onAttachedToWindow() {
@@ -132,7 +101,7 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     override fun onDetachedFromWindow() {
         if (loadingState.isLoading) {
             val state = loadingState.copy()
-            dismissLoading(loadingView, failView)
+            calDismissLoading()
             loadingState.detachState = state
         }
         animation?.cancel()
@@ -143,57 +112,46 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
         super.onDetachedFromWindow()
     }
 
-    private fun resetLayout() {
-        adapter.run {
-            getLoadingView()?.let {
-                removeView(loadingView)
-                loadingView = it
-                addView(loadingView)
-            }
-            getBottomPlateView()?.let {
-                removeView(bottomPlateView)
-                bottomPlateView = it
-                //就算先添加 BottomPlateView 偶尔也会出现遮挡loading 主动修正一下
-                bottomPlateView.elevation = -2F
-                addView(bottomPlateView)
-            }
-            getLoadingFailView()?.let {
-                removeView(failView)
-                failView = it.apply {
-                    visibility = View.GONE
-                }
-                addView(failView)
-            }
-            getEmptyView()?.let {
-                removeView(emptyView)
-                emptyView = it.apply {
-                    visibility = View.GONE
-                    elevation = -1F
-                }
-                addView(emptyView)
-            }
+    override fun showEmptyView(showBottomPlate: Boolean) {
+        adapter.singleEmptyView.elevation = -1F
+        addViewAndGone(adapter.singleEmptyView)
 
-        }
-
-        loadingState.isLoading = false
-    }
-
-    override fun showEmptyView() {
-        dismissLoading(loadingView, failView)
+        calDismissLoading()
         removeCallbacks(loadingDelayedRunnable)
-        loadingView.animation?.cancel()
-        loadingView.animate()
+        adapter.singleLoadingView.animation?.cancel()
+        adapter.singleLoadingView.animate()
             .alpha(0F)
             .setDuration(ANIM_DURATION)
             .withEndAction {
                 alpha = 1F
-                this@PageLoadingView.visibility = View.VISIBLE
-                loadingView.visibility = View.GONE
-                failView.visibility = View.GONE
-                emptyView.visibility = View.VISIBLE
-                adapter.onShowEmptyView(emptyView)
+                this@PageLoadingView.isVisible = true
+                visibleViewAndGoneOther(adapter.singleEmptyView, showBottomPlate)
+                adapter.onShowEmptyView()
             }
             .start()
+    }
+
+    private fun addViewAndGone(view: View) {
+        if (!this.contains(view)) {
+            view.isVisible = false
+            addView(view)
+        }
+    }
+
+    private fun visibleViewAndGoneOther(visibleView: View, showBottomPlate: Boolean) {
+        this.forEach {
+            when (it) {
+                visibleView -> {
+                    it.isVisible = true
+                }
+                adapter.singleBottomPlateView -> {
+                    it.isVisible = showBottomPlate
+                }
+                else -> {
+                    it.isVisible = false
+                }
+            }
+        }
     }
 
     /**
@@ -204,21 +162,16 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     override fun showLoading(showBottomPlate: Boolean) {
         "showLoading showBottomPlate=$showBottomPlate".log()
 
-        dismissLoading(loadingView, failView)
+        calDismissLoading()
         loadingState.isLoading = true
         loadingState.showBottomPlate = showBottomPlate
 
         removeCallbacks(loadingDelayedRunnable)
         alpha = 1F
-        visibility = View.VISIBLE
-        failView.visibility = View.GONE
-        emptyView.visibility = View.GONE
-        bottomPlateView.visibility = if (showBottomPlate) View.VISIBLE else View.GONE
-        loadingView.run {
-            visibility = View.VISIBLE
-            if (alpha != 1F) alpha = 1F
-        }
-        adapter.onShowLoading(loadingView)
+        isVisible = true
+        visibleViewAndGoneOther(adapter.singleLoadingView, showBottomPlate)
+        adapter.singleLoadingView.run { if (alpha != 1F) alpha = 1F }
+        adapter.onShowLoading()
     }
 
     override fun showLoadingDelayed(delayedMills: Long, showBottomPlate: Boolean) {
@@ -228,29 +181,32 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun showLoadingFail(showBottomPlate: Boolean, type: Int, extra: Any?) {
-        dismissLoading(loadingView, failView)
+        addViewAndGone(adapter.singleLoadingFailView)
+
+        calDismissLoading()
         removeCallbacks(loadingDelayedRunnable)
-        loadingView.animation?.cancel()
-        loadingView.animate()
+        adapter.singleLoadingView.animation?.cancel()
+        adapter.singleLoadingView.animate()
             .alpha(0F)
             .setDuration(ANIM_DURATION)
             .withEndAction {
                 alpha = 1F
                 visibility = View.VISIBLE
-                bottomPlateView.visibility = if (showBottomPlate) View.VISIBLE else View.GONE
-                loadingView.visibility = View.GONE
-                emptyView.visibility = View.GONE
-                failView.visibility = View.VISIBLE
-                adapter.onShowFail(failView, type, extra, failViewEventListener)
+                visibleViewAndGoneOther(adapter.singleLoadingFailView, showBottomPlate)
+                adapter.onShowFail(
+                    type,
+                    extra,
+                    failViewEventListener
+                )
             }
             .start()
     }
 
-    private fun dismissLoading(loadingView: View, view: View?) {
+    private fun calDismissLoading() {
         loadingState.detachState = null
         if (loadingState.isLoading) {
             loadingState.isLoading = false
-            adapter.onDismissLoading(loadingView, view)
+            adapter.onDismissLoading()
         }
     }
 
@@ -259,13 +215,13 @@ class PageLoadingView(context: Context, attributeSet: AttributeSet?) :
      */
     override fun stop() {
         removeCallbacks(loadingDelayedRunnable)
-        loadingView.animation?.cancel()
+        adapter.singleLoadingView.animation?.cancel()
         animate()
             .alpha(0F)
             .setDuration(ANIM_DURATION)
             .withEndAction {
                 visibility = GONE
-                dismissLoading(loadingView, failView)
+                calDismissLoading()
             }
             .start()
     }
