@@ -1,4 +1,4 @@
-import com.foundation.widget.buildsrc.Dependencies
+import com.buildsrc.kts.Dependencies
 
 plugins {
     id("com.android.application")
@@ -68,19 +68,10 @@ dependencies {
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.Material.material)
     implementation(Dependencies.AndroidX.constraintlayout)
-    implementation(Dependencies.OpenSourceLibrary.flex_box)
+    implementation(Dependencies.OpenSourceLibrary.flexBox)
 //    implementation("com.foundation.widget:loading:1.0.2-SNAPSHOT")
     implementation(project(":loading"))
 //    implementation(Dependencies.Glide.glide)
 //    implementation(Dependencies.Glide.compiler)
 
-}
-repositories {
-    maven {
-        setUrl(com.foundation.widget.buildsrc.Publish.Maven.getCodingRepoUrl(project))
-        credentials {
-            username = com.foundation.widget.buildsrc.Publish.Maven.getCodingMavenUsername(project)
-            password = com.foundation.widget.buildsrc.Publish.Maven.getCodingMavenPassword(project)
-        }
-    }
 }

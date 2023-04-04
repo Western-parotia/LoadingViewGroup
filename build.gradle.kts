@@ -1,38 +1,28 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
+import com.buildsrc.kts.GlobalConfig
+
+//buildSrc的初始化init
+GlobalConfig.init(project)
+
+buildscript {//这里不支持import
     repositories {
-        google()
-        jcenter()
+        com.buildsrc.kts.Repositories.defRepositories(this)
     }
     dependencies {
-        classpath(group = "com.android.tools.build", name = "gradle", version = "4.1.0")
-        classpath(
-            group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin",
-            version = com.foundation.widget.buildsrc.Dependencies.Kotlin.version
-        )
+        classpath("com.android.tools.build:gradle:4.1.3")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${com.buildsrc.kts.Dependencies.kotlinVersion}")
+
         // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle-backup-backup files
+        // in the individual module build.gradle files
     }
 }
 
 allprojects {
     repositories {
-        google()
-        jcenter()
-        maven { setUrl("https://jitpack.io") }
-        maven {
-            setUrl(com.foundation.widget.buildsrc.Publish.Maven.getCodingRepoUrl(project))
-            credentials {
-                username =
-                    com.foundation.widget.buildsrc.Publish.Maven.getCodingMavenUsername(project)
-                password =
-                    com.foundation.widget.buildsrc.Publish.Maven.getCodingMavenPassword(project)
-            }
-        }
+        com.buildsrc.kts.Repositories.defRepositories(this)
     }
 }
 
 tasks.register("clean", Delete::class.java) {
     delete(rootProject.buildDir)
-
 }
